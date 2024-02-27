@@ -1,0 +1,58 @@
+const express = require('express');
+const { Server } = require('socket.io');
+const http = require('http');
+const fs = require('fs');
+const url = require('url');
+const slugify = require('slugify');
+const port = 3000;
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+const sessionConfig = require('./middlewares/sessionConfig'); // Import the session configuration module
+
+app.use(express.json());
+app.use(sessionConfig);
+
+// Define all routers
+const userRouter = require('./routes/userRoutes'); // user + skills and interests
+const localpartnershipRouter = require('./routes/localpartnershipRoutes');
+const craftprojectRouter = require('./routes/craftprojectRoutes'); // project  + resource??
+const resourcesRouter = require('./routes/resourcesRoutes');
+const communicationRouter = require('./routes/communicationRoutes');
+const finishedprojectRouter = require('./routes/finishedprojectRoutes');
+// const externalAPIs = require('./routes/external-APIsRoutes');
+
+const {
+  addUserSocket,
+  notifyUser,
+  removeUserSocket,
+} = require('./services/SocketService');
+
+app.use('/api/users', userRouter);
+app.use('/api/localpartnerships', localpartnershipRouter);
+app.use('/api/craftprojects', craftprojectRouter);
+app.use('/api/resources', resourcesRouter);
+app.use('/api/communications', communicationRouter);
+app.use('/api/finishedprojects', finishedprojectRouter);
+// app.use('/api/external-api', externalAPIs);
+
+io.on('connection', (socket) => {
+  console.log('A user connected');
+  socket.on('login', (data) => {
+    addUserSocket(data, socket);
+    notifyUser(data, 'test notify');
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+    removeUserSocket(socket);
+  });
+});
+
+
+server.listen(port, '0.0.0.0', () =>
+  console.log(`Server ready at: http://localhost:${port}`),
+);
+
+module.exports = app;
