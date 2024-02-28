@@ -12,13 +12,14 @@ const db = mysql.createConnection({
 });
 
 class UserRepository {
+
   registerUser(req, res) {
     const { username, password, email } = req.body;
 
     return new Promise((resolve, reject) => {
       // Check if the user already exists (Checking the email)
       db.query(
-        'SELECT * FROM users WHERE Email = ? OR Username = ? AND active = 1',
+        'SELECT * FROM users WHERE Email = ? OR Username = ? AND Active = 1',
         [username, email],
         (error, results) => {
           if (error) {
@@ -62,7 +63,7 @@ class UserRepository {
     const { username, password } = req.body;
     // Find the user by username
     db.query(
-      'SELECT * FROM users WHERE Username = ? AND active = 1',
+      'SELECT * FROM users WHERE Username = ? AND Active = 1',
       [username],
       (error, results) => {
         if (error) {
@@ -116,7 +117,7 @@ class UserRepository {
     const { userId } = req.session;
 
     db.query(
-      'SELECT * FROM users WHERE UserID = ? AND active = 1',
+      'SELECT * FROM users WHERE UserID = ? AND Active = 1',
       [userId],
       (searchError, results) => {
         if (searchError) {
@@ -141,20 +142,20 @@ class UserRepository {
     const { userId } = req.session;
 
     db.query(
-      'SELECT Username, Password, Email, Role, CraftSkill, CraftInterest, ProfilePicture, PartnershipID, registrationDate, lastLoginDate FROM users WHERE UserID = ? AND active = 1',
-      [userId],
-      (error, results) => {
-        if (error) {
-          return res.status(500).json({ message: 'Internal server error.' });
-        }
+        'SELECT * FROM users WHERE UserID = ? AND Active = 1',
+        [userId],
+        (error, results) => {
+            if (error) {
+                return res.status(500).json({ message: 'Internal server error.' });
+            }
 
-        if (results.length === 0) {
-          return res.status(404).json({ message: 'User not found.' });
-        }
+            if (results.length === 0) {
+                return res.status(404).json({ message: 'User not found.' });
+            }
 
-        const userProfile = results[0];
-        return res.json({ user: userProfile });
-      },
+            const userProfile = results[0];
+            return res.json({ user: userProfile });
+        },
     );
   }
 
@@ -164,7 +165,7 @@ class UserRepository {
 
     // Check if the user exists
     db.query(
-      'SELECT * FROM users WHERE UserID = ? AND active = 1',
+      'SELECT * FROM users WHERE UserID = ? AND Active = 1',
       [userId],
       (error, results) => { 
         if (error) { 
@@ -267,12 +268,12 @@ class UserRepository {
     );
   }
 
-  deactivateAccount(req, res) {
+  deleteAccount(req, res) {
     const { userId } = req.session;
 
     // Check if the user exists
     db.query(
-      'SELECT * FROM users WHERE UserID = ? AND active = 1',
+      'SELECT * FROM users WHERE UserID = ? AND Active = 1',
       [userId],
       (error, results) => {
         if (error) {
@@ -283,33 +284,36 @@ class UserRepository {
           return res.status(404).json({ message: 'User not found.' });
         }
 
-        // Update the user's account to be deactivated
+        // Delete
         db.query(
-          'UPDATE users SET active = 0 WHERE UserID = ?',
+          'DELETE FROM users WHERE UserID = ? AND Active = 1',
           [userId],
-          (updateError) => {
-            if (updateError) {
-              return res
-                .status(500)
-                .json({ message: 'Account deactivation failed.' });
-            }
-
-            // Destroy the session after deactivating the account
-            req.session.destroy((destroyError) => {
-              if (destroyError) {
-                return res
-                  .status(500)
-                  .json({ message: 'Error destroying session.' });
+          (deleteError, deleteResults) => {
+              if (deleteError) {
+                  return res.status(500).json({ message: 'User deletion failed.' });
               }
-
-              return res.json({ message: 'Account deactivated successfully.' });
-            });
-          },
-        );
+      
+              // Check if any rows were affected by the delete operation
+              if (deleteResults.affectedRows === 0) {
+                  return res.status(404).json({ message: 'User not found.' });
+              }
+      
+              // Destroy the session after deleting the user account
+              req.session.destroy((destroyError) => {
+                  if (destroyError) {
+                      return res.status(500).json({ message: 'Error destroying session.' });
+                  }
+      
+                  return res.json({ message: 'User deleted successfully.' });
+              });
+          }
+      );
+      
       },
     );
   }  
 
+  
 
   // searchUser(req, res) {
   //   const { username } = req.params;

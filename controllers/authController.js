@@ -7,6 +7,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     Username: req.body.username,
     Email: req.body.email,
     Password: req.body.password,
+    UserType: req.body.usertype,
   };
 
   // Check if the username or email already exists
@@ -37,24 +38,26 @@ exports.signup = catchAsync(async (req, res, next) => {
     newUser.Password = hashedPassword;
     const date = new Date();
 
+    
     try {
       await sequelize.query(
-        'INSERT INTO users (Username, Password, Email, Role, CraftSkill, CraftInterest, ProfilePicture, PartnerShipID, RegistrationDate, LastLoginDate, Active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        'INSERT INTO users (Username, Password, Email, userType, CraftSkill, CraftInterest, ProfilePicture, RegistrationDate, LastLoginDate, Active, PartnerShipID, ProjectID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         {
           replacements: [
             newUser.Username,            
             newUser.Password,
             newUser.Email,
-            'user',
+            newUser.UserType,
             null,
             null,
-            null,
-            null,
+            null,            
             date,
+            null,            
+            '1', 
             null,
-            '1',            
+            null,           
           ],
-          type: sequelize.QueryTypes.INSERT,
+          usertype: sequelize.QueryTypes.INSERT,
         },
       );
 
