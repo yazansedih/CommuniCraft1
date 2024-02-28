@@ -38,8 +38,8 @@ exports.updateUserProfile = (req, res) => {
   userRepository.updateUserProfile(req, res);
 };
 
-exports.deactivateAccount = (req, res) => {
-  userRepository.deactivateAccount(req, res);
+exports.deleteAccount = (req, res) => {
+  userRepository.deleteAccount(req, res);
 };
 
 

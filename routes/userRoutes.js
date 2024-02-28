@@ -29,9 +29,9 @@ router.get('/skill',authenticateUser ,userController.skillMatch);
 
   
 router.delete(
-  '/deactivate',
+  '/delete',
   authenticateUser,
-  userController.deactivateAccount,
+  userController.deleteAccount,
 );
 
 // router.get('/sameUsers', authenticateUser, userController.getSameUsers);
