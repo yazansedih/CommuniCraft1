@@ -16,8 +16,9 @@ app.use(sessionConfig);
 
 // Define all routers
 const userRouter = require('./routes/userRoutes'); // user + skills and interests
+const companiesRoutes = require('./routes/companiesRoutes'); 
 const localpartnershipRouter = require('./routes/localpartnershipRoutes');
-const craftprojectRouter = require('./routes/craftprojectRoutes'); // project  + resource??
+const craftprojectRouter = require('./routes/craftprojectRoutes'); // project  + resource?? 
 const resourcesRouter = require('./routes/resourcesRoutes');
 const communicationRouter = require('./routes/communicationRoutes');
 const finishedprojectRouter = require('./routes/finishedprojectRoutes');
@@ -30,6 +31,7 @@ const {
 } = require('./services/SocketService');
 
 app.use('/api/users', userRouter);
+app.use('/api/companies', companiesRoutes);
 app.use('/api/localpartnerships', localpartnershipRouter);
 app.use('/api/craftprojects', craftprojectRouter);
 app.use('/api/resources', resourcesRouter);
