@@ -18,7 +18,8 @@ exports.signup = catchAsync(async (req, res, next) => {
       type: sequelize.QueryTypes.SELECT,
     },
   );
-
+  
+  console.log(existingUser.length, "zzzzzz");
   if (existingUser.length > 0) {
     return res.status(409).json({
       status: 'error',
