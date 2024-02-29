@@ -14,7 +14,7 @@ const db = mysql.createConnection({
 class UserRepository {
 
   registerUser(req, res) {
-    const { username, password, email } = req.body;
+    const { username, password, email, usertype } = req.body;
 
     return new Promise((resolve, reject) => {
       // Check if the user already exists (Checking the email)
@@ -40,8 +40,8 @@ class UserRepository {
 
             // Create a new user with the hashed password and registration date
             db.query(
-              'INSERT INTO users (username, password, email, RegistrationDate) VALUES (?, ?, ?, ?)',
-              [username, hashedPassword, email, registrationDate],
+              'INSERT INTO users (Username, Password, Email, userType, RegistrationDate) VALUES (?, ?, ?, ?, ?)',
+              [username, hashedPassword, email, usertype, registrationDate],
               (insertError) => {
                 if (insertError) {
                   console.log(password);

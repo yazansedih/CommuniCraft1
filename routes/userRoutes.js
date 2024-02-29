@@ -7,9 +7,9 @@ const router = express.Router();
 
 // Routes for user registration and authentication
 router.post('/signup', authController.signup); //api/users/signup
+// router.post('/signup', userController.registerUser); //api/users/signup
 router.post('/login', userController.loginUser);
 
-// Protected routes that require authentication
 router
   .route('/profile')
   .get(authenticateUser, userController.getUserProfile)
@@ -28,11 +28,8 @@ router
 router.get('/skill',authenticateUser ,userController.skillMatch);
 
   
-router.delete(
-  '/delete',
-  authenticateUser,
-  userController.deleteAccount,
-);
+router.delete('/delete', authenticateUser, userController.deleteAccount);
+
 
 // router.get('/sameUsers', authenticateUser, userController.getSameUsers);
 // router.post('/interests', authenticateUser, userController.addInterests);
