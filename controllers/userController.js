@@ -43,7 +43,6 @@ exports.deleteAccount = (req, res) => {
 };
 
 
-
 // exports.searchUser = (req, res) => {
 //   userRepository.searchUser(req, res);
 // };
