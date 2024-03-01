@@ -318,7 +318,7 @@ class UserRepository {
    getUserType(userId) {
     return new Promise((resolve, reject) => {
       db.query(
-        'SELECT userType FROM User WHERE userId = ?',
+        'SELECT userType FROM users WHERE UserID = ?',
         [userId],
         (error, results) => {
           if (error) {
