@@ -8,6 +8,8 @@ exports.signup = catchAsync(async (req, res, next) => {
     Email: req.body.email,
     Password: req.body.password,
     UserType: req.body.usertype,
+    Skills: req.body.skills,
+    Interest: req.body.interest,
   };
 
   // Check if the username or email already exists
@@ -49,8 +51,8 @@ exports.signup = catchAsync(async (req, res, next) => {
             newUser.Password,
             newUser.Email,
             newUser.UserType,
-            null,
-            null,
+            newUser.Skills,
+            newUser.Interest,
             null,            
             date,
             null,            
@@ -74,4 +76,21 @@ exports.signup = catchAsync(async (req, res, next) => {
       });
     }
   });
+
+
+
+
+
+
+  
 });
+
+
+
+
+
+
+
+
+
+

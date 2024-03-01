@@ -24,9 +24,6 @@ router
   .patch('/profile/profilepicture', authenticateUser, userController.updateUserProfile)
   .patch('/profile/partnershipid', authenticateUser, userController.updateUserProfile);
   
-
-router.get('/skill',authenticateUser ,userController.skillMatch);
-
   
 router.delete('/delete', authenticateUser, userController.deleteAccount);
 
