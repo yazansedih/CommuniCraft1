@@ -1,9 +1,30 @@
-exports.authenticateUser = (req, res, next) => {
+const UserRepository = require('../data/database/UserRepository');
+
+const userRepository = new UserRepository();
+
+exports.authenticateUser = async (req, res, next) => {
   const userId = req.session.userId;
-  if (userId) {
-    next();
-  } else {
-    // User is not logged in, deny access
-    res.status(401).json({ message: 'Unauthorized, You are not a user!' });
+
+  try {
+    if (userId) {
+      const userType = await userRepository.getUserType(userId);
+
+      if (userType === 'user') {
+        // User is an admin, proceed to the next middleware or route handler
+        next();
+      } else {
+        // User is not an admin, deny access
+        res
+          .status(401)
+          .json({ message: 'Unauthorized, You are not an admin!' });
+      }
+    } else {
+      // User is not logged in, deny access
+      res.status(401).json({ message: 'Unauthorized, You are not logged in!' });
+    }
+  } catch (error) {
+    // Handle errors in the authenticateAdmin middleware
+    console.error('Error in authenticateAdmin:', error);
+    res.status(500).json({ message: 'Internal server error.' });
   }
 };

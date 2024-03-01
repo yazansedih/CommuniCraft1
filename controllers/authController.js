@@ -8,6 +8,8 @@ exports.signup = catchAsync(async (req, res, next) => {
     Email: req.body.email,
     Password: req.body.password,
     UserType: req.body.usertype,
+    Skills: req.body.skills,
+    Interest: req.body.interest,
   };
 
   // Check if the username or email already exists
@@ -19,7 +21,6 @@ exports.signup = catchAsync(async (req, res, next) => {
     },
   );
   
-  console.log(existingUser.length, "zzzzzz");
   if (existingUser.length > 0) {
     return res.status(409).json({
       status: 'error',
@@ -39,7 +40,8 @@ exports.signup = catchAsync(async (req, res, next) => {
     newUser.Password = hashedPassword;
     const date = new Date();
 
-    
+    const craftInterestJSON = newUser.Interest && Array.isArray(newUser.Interest) ? JSON.stringify(newUser.Interest) : null;
+
     try {
       await sequelize.query(
         'INSERT INTO users (Username, Password, Email, userType, CraftSkill, CraftInterest, ProfilePicture, RegistrationDate, LastLoginDate, Active, PartnerShipID, ProjectID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
@@ -49,8 +51,8 @@ exports.signup = catchAsync(async (req, res, next) => {
             newUser.Password,
             newUser.Email,
             newUser.UserType,
-            null,
-            null,
+            newUser.Skills,
+            craftInterestJSON, // Insert the JSON string of CraftInterest
             null,            
             date,
             null,            
@@ -58,7 +60,7 @@ exports.signup = catchAsync(async (req, res, next) => {
             null,
             null,           
           ],
-          usertype: sequelize.QueryTypes.INSERT,
+          type: sequelize.QueryTypes.INSERT,
         },
       );
 
@@ -74,4 +76,21 @@ exports.signup = catchAsync(async (req, res, next) => {
       });
     }
   });
+
+
+
+
+
+
+  
 });
+
+
+
+
+
+
+
+
+
+
