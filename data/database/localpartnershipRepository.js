@@ -12,7 +12,23 @@ const db = mysql.createConnection({
 });
 
 class LocalpartnershipRepository {
-    // write your functions ...
+
+  addWorkshop(req, res) {
+    const { userId } = req.session;
+    const { workshopname, location, description, contactinfo , groupsize, cost } = req.body;
+
+    const sql = 'INSERT INTO localpartnerships (WorkshopName, Location, Description, ContactInfo , GroupSize, Cost) VALUES (?, ?, ?, ?, ?, ?)';
+
+    db.query(sql, [workshopname, location, description, contactinfo , groupsize, cost], (error, results) => {
+        if (error) {
+            console.error('Error inserting project:', error);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+
+        res.status(201).json({ message: 'Workshop added successfully', workshopId: results.insertId });
+    });
+  }
+
 
 }
 

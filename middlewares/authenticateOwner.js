@@ -9,19 +9,19 @@ exports.authenticateOnwer = async (req, res, next) => {
     if (userId) {
       const userType = await userRepository.getUserType(userId);
 
-      if (userType === 'onwer') {
+      if (userType === 'owner') {
         next();
       } else {
         res
           .status(401)
-          .json({ message: 'Unauthorized, You are not an onwer!' });
+          .json({ message: 'Unauthorized, You are not an owner!' });
       }
     } else {
       res.status(401).json({ message: 'Unauthorized, You are not logged in!' });
     }
   } catch (error) {
     // Handle errors in the authenticateOnwer middleware
-    console.error('Error in authenticateOnwer:', error);
+    console.error('Error in authenticateOwner:', error);
     res.status(500).json({ message: 'Internal server error.' });
   }
 };

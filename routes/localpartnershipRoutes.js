@@ -4,12 +4,10 @@ const { authenticateOnwer } = require('../middlewares/authenticateOwner');
 const authController = require('../controllers/authController');
 const UserRepository = require('../data/database/UserRepository');
 
-
 const router = express.Router();
 
-
 // Routes for user registration and authentication
-router.post('/addworkshop', authenticateOnwer, authController.signup); 
+router.post('/addworkshop', authenticateOnwer, localpartnershipController.addWorkshop); 
 
 
 
