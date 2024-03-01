@@ -313,7 +313,9 @@ class UserRepository {
     );
   }  
 
-  
+}
+  module.exports = UserRepository;
+
 
   // searchUser(req, res) {
   //   const { username } = req.params;
@@ -1027,6 +1029,3 @@ class UserRepository {
   //     );
   //   });
   // }
-}
-
-module.exports = UserRepository;

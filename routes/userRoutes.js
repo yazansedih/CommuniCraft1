@@ -24,37 +24,8 @@ router
   .patch('/profile/profilepicture', authenticateUser, userController.updateUserProfile)
   .patch('/profile/partnershipid', authenticateUser, userController.updateUserProfile);
   
-  
 router.delete('/delete', authenticateUser, userController.deleteAccount);
 
-
-// router.get('/sameUsers', authenticateUser, userController.getSameUsers);
-// router.post('/interests', authenticateUser, userController.addInterests);
-// router.get('/interests', authenticateUser, userController.getInterests);
-// router.post(
-//   '/contribution',
-//   authenticateUser,
-//   userController.createContribution,
-// );
-// router.get(
-//   '/contributions',
-//   authenticateUser,
-//   userController.getUsersContributions,
-// );
-
-// router.get(
-//   '/receivedMessages',
-//   authenticateUser,
-//   userController.getReceivedMessages,
-// );
-// router.get('/sentMessages', authenticateUser, userController.getSentMessages);
-// router.post('/sendMessage', authenticateUser, userController.sendMessage);
-
-// // Route to search for users
-// router.get('/search/:username', authenticateUser, userController.searchUser);
-
-
-// // Route to log out (invalidate the token or session)
 router.get('/logout', authenticateUser, userController.logoutUser);
 
 module.exports = router;
