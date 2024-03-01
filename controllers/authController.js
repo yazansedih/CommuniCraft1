@@ -3,6 +3,7 @@ const catchAsync = require('../utils/catchAsync');
 const { sequelize } = require('../models/Sequelize');
 
 exports.signup = catchAsync(async (req, res, next) => {
+  console.log("sssssssssssss");
   const newUser = {
     Username: req.body.username,
     Email: req.body.email,
