@@ -9,7 +9,7 @@ exports.authenticateAdmin = async (req, res, next) => {
     if (userId) {
       const userType = await userRepository.getUserType(userId);
 
-      if (userType === 'admin') {
+      if (userType === 'owner') {
         // User is an admin, proceed to the next middleware or route handler
         next();
       } else {

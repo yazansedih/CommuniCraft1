@@ -313,6 +313,25 @@ class UserRepository {
     );
   }  
 
+
+   // for middlewares
+   getUserType(userId) {
+    return new Promise((resolve, reject) => {
+      db.query(
+        'SELECT userType FROM User WHERE userId = ?',
+        [userId],
+        (error, results) => {
+          if (error) {
+            reject('Error fetching user type from the database.');
+          } else {
+            const userType = results[0]?.userType;
+            resolve(userType);
+          }
+        },
+      );
+    });
+  }
+
 }
   module.exports = UserRepository;
 
@@ -1012,20 +1031,4 @@ class UserRepository {
   //   });
   // }
 
-  // // for middlewares
-  // getUserType(userId) {
-  //   return new Promise((resolve, reject) => {
-  //     db.query(
-  //       'SELECT userType FROM User WHERE userId = ?',
-  //       [userId],
-  //       (error, results) => {
-  //         if (error) {
-  //           reject('Error fetching user type from the database.');
-  //         } else {
-  //           const userType = results[0]?.userType;
-  //           resolve(userType);
-  //         }
-  //       },
-  //     );
-  //   });
-  // }
+ 
