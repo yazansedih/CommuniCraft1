@@ -9,10 +9,12 @@ const skillsRepository = new SkillsRepository();
 exports.skillMatch = async(req, res) => {
     try {
       
-      const { CraftSkill, CraftInterest } = req.body;
+
+     // const { CraftSkill, CraftInterest } = req.body;
   
       // Retrieve data from the database based on CraftSkill and CraftInterest
-      const matchingData = await database.query('SELECT * FROM users WHERE CraftSkill = ? AND CraftInterest = ?', [CraftSkill, CraftInterest]);
+      const matchingData = await database.query('SELECT * FROM users WHERE CraftSkill = ? AND CraftInterest = ?');
+
   
       // Return the matching data
       res.status(200).json({ success: true, data: matchingData });
@@ -20,4 +22,5 @@ exports.skillMatch = async(req, res) => {
       console.error('Error in skillMatch function:', error);
       res.status(500).json({ success: false, error: 'Internal Server Error' });
     }
+
 };
