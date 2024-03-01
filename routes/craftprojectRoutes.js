@@ -1,6 +1,7 @@
 const express = require('express');
 const craftprojectController = require('../controllers/craftprojectController');
 const { authenticateCustomer } = require('../middlewares/authenticateCustomer');
+const { authenticateUser } = require('../middlewares/authenticateUser');
 const authController = require('../controllers/authController');
 const { authenticateAdmin } = require('../middlewares/authenticateAdmin');
 
