@@ -10,21 +10,18 @@ exports.authenticateUser = async (req, res, next) => {
       const userType = await userRepository.getUserType(userId);
 
       if (userType === 'user') {
-        // User is an admin, proceed to the next middleware or route handler
         next();
       } else {
-        // User is not an admin, deny access
         res
           .status(401)
-          .json({ message: 'Unauthorized, You are not an admin!' });
+          .json({ message: 'Unauthorized, You are not an user!' });
       }
     } else {
-      // User is not logged in, deny access
       res.status(401).json({ message: 'Unauthorized, You are not logged in!' });
     }
   } catch (error) {
-    // Handle errors in the authenticateAdmin middleware
-    console.error('Error in authenticateAdmin:', error);
+    // Handle errors in the authenticateUser middleware
+    console.error('Error in authenticateUser:', error);
     res.status(500).json({ message: 'Internal server error.' });
   }
 };
