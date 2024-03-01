@@ -48,7 +48,7 @@ exports.skillMatch = async(req, res) => {
   try {
     
     const { CraftSkill, CraftInterest } = req.body;
-
+console.log("awwad");
     // Retrieve data from the database based on CraftSkill and CraftInterest
     const matchingData = await database.query('SELECT * FROM users WHERE CraftSkill = ? AND CraftInterest = ?', [CraftSkill, CraftInterest]);
 
@@ -57,9 +57,10 @@ exports.skillMatch = async(req, res) => {
   } catch (error) {
     console.error('Error in skillMatch function:', error);
     res.status(500).json({ success: false, error: 'Internal Server Error' });
+    
   }
 };
-
+//awwad
 
 // exports.searchUser = (req, res) => {
 //   userRepository.searchUser(req, res);
