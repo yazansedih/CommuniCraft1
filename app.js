@@ -14,8 +14,7 @@ const sessionConfig = require('./middlewares/sessionConfig'); // Import the sess
 app.use(express.json());
 app.use(sessionConfig);
 
-// Define all routers
-const userRouter = require('./routes/userRoutes')
+const userRouter = require('./routes/userRoutes');
 const skillsRouter = require('./routes/skillsRoutes'); 
 const companiesRoutes = require('./routes/companiesRoutes'); 
 const localpartnershipRouter = require('./routes/localpartnershipRoutes');

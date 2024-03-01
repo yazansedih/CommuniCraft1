@@ -2,7 +2,7 @@ const UserRepository = require('../data/database/UserRepository');
 
 const userRepository = new UserRepository();
 
-exports.authenticateAdmin = async (req, res, next) => {
+exports.authenticateUser = async (req, res, next) => {
   const userId = req.session.userId;
 
   try {
@@ -16,7 +16,7 @@ exports.authenticateAdmin = async (req, res, next) => {
         // User is not an admin, deny access
         res
           .status(401)
-          .json({ message: 'Unauthorized, You are not an user!' });
+          .json({ message: 'Unauthorized, You are not an admin!' });
       }
     } else {
       // User is not logged in, deny access
@@ -24,7 +24,7 @@ exports.authenticateAdmin = async (req, res, next) => {
     }
   } catch (error) {
     // Handle errors in the authenticateAdmin middleware
-    console.error('Error in authenticateUser:', error);
+    console.error('Error in authenticateAdmin:', error);
     res.status(500).json({ message: 'Internal server error.' });
   }
 };
