@@ -15,3 +15,7 @@ exports.addWorkshop = (req, res) => {
   exports.updateWorkshopProfile = (req, res) => {
     localpartnershipRepository.updateWorkshopProfile(req, res);
   }
+
+  exports.deleteWorkshop = (req, res) => {
+    localpartnershipRepository.deleteWorkshop(req, res);
+  }
