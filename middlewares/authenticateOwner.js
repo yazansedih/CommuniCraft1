@@ -20,7 +20,6 @@ exports.authenticateOnwer = async (req, res, next) => {
       res.status(401).json({ message: 'Unauthorized, You are not logged in!' });
     }
   } catch (error) {
-    // Handle errors in the authenticateOnwer middleware
     console.error('Error in authenticateOwner:', error);
     res.status(500).json({ message: 'Internal server error.' });
   }
