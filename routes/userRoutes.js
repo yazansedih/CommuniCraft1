@@ -1,12 +1,14 @@
 const express = require('express');
 const userController = require('../controllers/userController');
+const { authenticateNotAdmin } = require('../middlewares/authenticateNotAdmin');
+const { authenticateArtisan } = require('../middlewares/authenticateArtisan');
 const { authenticateUser } = require('../middlewares/authenticateUser');
 const authController = require('../controllers/authController');
 
 const router = express.Router();
 
 // Routes for user registration and authentication
-router.post('/signup', authController.signup); //api/users/signup
+router.post('/signup', authenticateNotAdmin, authController.signup); //api/users/signup
 // router.post('/signup', userController.registerUser); //api/users/signup
 router.post('/login', userController.loginUser);
 
@@ -24,7 +26,7 @@ router
   .patch('/profile/profilepicture', authenticateUser, userController.updateUserProfile)
   .patch('/profile/partnershipid', authenticateUser, userController.updateUserProfile);
   
-router.delete('/delete', authenticateUser, userController.deleteAccount);
+router.delete('/delete', userController.deleteAccount);
 
 router.get('/logout', authenticateUser, userController.logoutUser);
 
