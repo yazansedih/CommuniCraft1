@@ -9,7 +9,7 @@ exports.authenticateArtisan = async (req, res, next) => {
     if (userId) {
       const userType = await userRepository.getUserType(userId);
 
-      if (userType === 'user') {
+      if (userType === 'artisan') {
         next();
       } else {
         res
