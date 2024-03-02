@@ -13,21 +13,16 @@ router.post('/addworkshop', authenticateOnwer, localpartnershipController.addWor
 router.get('/workshopProfile/:id', authenticateOnwer, localpartnershipController.getWorkshopProfile)
 
 router
-  .patch('/profile/workshopname/:id', authenticateOnwer, localpartnershipController.updateWorkshopProfile)
-  .patch('/profile/location/:id', authenticateOnwer, localpartnershipController.updateWorkshopProfile)
-  .patch('/profile/description/:id', authenticateOnwer, localpartnershipController.updateWorkshopProfile)
-  .patch('/profile/contactinfo/:id', authenticateOnwer, localpartnershipController.updateWorkshopProfile)
-  .patch('/profile/cost/:id', authenticateOnwer, localpartnershipController.updateWorkshopProfile)
-
-
-
-
-
+  .patch('/workshopProfile/workshopname/:id', authenticateOnwer, localpartnershipController.updateWorkshopProfile)
+  .patch('/workshopProfile/location/:id', authenticateOnwer, localpartnershipController.updateWorkshopProfile)
+  .patch('/workshopProfile/description/:id', authenticateOnwer, localpartnershipController.updateWorkshopProfile)
+  .patch('/workshopProfile/contactinfo/:id', authenticateOnwer, localpartnershipController.updateWorkshopProfile)
+  .patch('/workshopProfile/cost/:id', authenticateOnwer, localpartnershipController.updateWorkshopProfile)
 
 
 // router.get('/searchgroups', authenticateOnwer, localpartnershipController.searchGroups); 
 // router.post('/groupemployment', authenticateOnwer, localpartnershipController.groupEmployment); 
 
-// router.post('/deleteworkshop', authenticateOnwer, localpartnershipController.deleteWorkshop); 
+router.delete('/deleteworkshop/:id', authenticateOnwer, localpartnershipController.deleteWorkshop); 
 
 module.exports = router;

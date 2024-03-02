@@ -30,10 +30,10 @@ class LocalpartnershipRepository {
   }
 
   getWorkshopProfile(req, res) {
-    const { workshopId } = req.params; 
-
+    const { id } = req.params; 
+    
     const sql = 'SELECT * FROM localpartnerships WHERE WorkshopID = ?';
-    db.query(sql, [workshopId], (error, results) => {
+    db.query(sql, [id], (error, results) => {
         if (error) {
             console.error('Error searching for Workshop:', error);
             return res.status(500).json({ error: 'Internal server error' });
@@ -50,62 +50,53 @@ class LocalpartnershipRepository {
   }
 
   updateWorkshopProfile(req, res) {
-    const { userId } = req.session;
-    const { workshopId } = req.params; 
-    const { Workshopname, Location, Email, CraftSkill, CraftInterest, ProfilePicture } = req.body.user;
+    const { ownerId } = req.session;
+    const { id } = req.params; 
+    const { Workshopname, Location, Description, ContactInfo, cost } = req.body.workshop;
 
     // Check if the user exists
     db.query(
-      'SELECT * FROM users WHERE UserID = ? AND Active = 1',
-      [userId],
+      'SELECT * FROM localpartnerships WHERE WorkshopID = ?',
+      [id],
       (error, results) => { 
         if (error) { 
           return res.status(500).json({ message: 'Internal server error.' });
         }
         if (results.length === 0) {
-          return res.status(404).json({ message: 'User not found.' });
+          return res.status(404).json({ message: 'Workshop not found.' });
         }
 
         // Prepare an update query based on the fields the user wants to update
         const updateFields = [];
         const updateValues = [];
 
-        if (Username) {
-          updateFields.push('Username = ?');
-          updateValues.push(Username);
+        if (Workshopname) {
+          updateFields.push('WorkshopName = ?');
+          updateValues.push(Workshopname);
         }
-        if (Password) {
-            updateFields.push('Password = ?');
-            updateValues.push(Password);          
+        if (Location) {
+            updateFields.push('Location = ?');
+            updateValues.push(Location);          
         }
-        if (Email) {
-          updateFields.push('Email = ?');
-          updateValues.push(Email);
+        if (Description) {
+          updateFields.push('Description = ?');
+          updateValues.push(Description);
         }
-        // if (Role) {
-        //   updateFields.push('Role = ?');
-        //   updateValues.push(Role);
+
+        // if (ContactInfo && Array.isArray(ContactInfo)) {
+        //   const ContactInfoJSON = JSON.stringify(ContactInfo);
+
+        //   updateFields.push('ContactInfo = ?');
+        //   updateValues.push(ContactInfoJSON);
         // }
-
-        // Handle craftskill (assuming craftskill is a JSON data type)
-        if (CraftSkill) {
-          updateFields.push(`CraftSkill = ?`);
-          updateValues.push(CraftSkill);
+        if (ContactInfo) {
+          updateFields.push('ContactInfo = ?');
+          updateValues.push(ContactInfo);
         }
 
-        // Handle craftinterest (assuming craftinterest is a JSON data type)
-        if (CraftInterest && Array.isArray(CraftInterest)) {
-          // Convert the array of strings to JSON format
-          const craftInterestJSON = JSON.stringify(CraftInterest);
-
-          // Update the CraftInterest field with the JSON string
-          updateFields.push('CraftInterest = ?');
-          updateValues.push(craftInterestJSON);
-        }
-
-        if (ProfilePicture) {
-          updateFields.push('ProfilePicture = ?');
-          updateValues.push(ProfilePicture);
+        if (cost) {
+          updateFields.push(`Cost = ?`);
+          updateValues.push(cost);
         }
         
         if (updateFields.length === 0) {
@@ -113,52 +104,44 @@ class LocalpartnershipRepository {
             .status(400)
             .json({ message: 'No valid fields to update.' });
         }
+        
+        // Construct the parameterized update query
+        const updateQuery = `UPDATE localpartnerships SET ${updateFields.join(', ')} WHERE WorkshopID = ?`;
+        
+        // Combine the values for the query
+        const queryValues = [...updateValues, id];
+      
+        // Execute the parameterized query
+        db.query(updateQuery, queryValues, (updateError) => {
+          if (updateError) {
+            return res.status(500).json({ message: 'Workshop update failed.' });
+          }
+      
+          return res.status(200).json({ message: 'Workshop updated successfully.' });
+        });
 
-        if (Password) {
-          console.log(Password);
-          // Hash the password before storing it 
-          bcrypt.hash(Password, 10, (hashError, hashedPassword) => {
-            if (hashError) {
-              return reject('Password update failed.');
-            }
-        
-            // Construct the parameterized update query
-            const updateQuery = `UPDATE users SET Password = ? WHERE UserID = ?`;
-        
-            // Combine the values for the query
-            const queryValues = [hashedPassword, userId];
-        
-            // Execute the parameterized query
-            db.query(updateQuery, queryValues, (updateError) => {
-              if (updateError) {
-                return res.status(500).json({ message: 'Password update failed.' });
-              }
-        
-              return res.json({ message: 'Password updated successfully.' });
-            });
-          });
-        } 
-        else {
-          // Construct the parameterized update query
-          const updateQuery = `UPDATE users SET ${updateFields.join(', ')} WHERE UserID = ?`;
-        
-          // Combine the values for the query
-          const queryValues = [...updateValues, userId];
-        
-          // Execute the parameterized query
-          db.query(updateQuery, queryValues, (updateError) => {
-            if (updateError) {
-              return res.status(500).json({ message: 'Profile update failed.' });
-            }
-        
-            return res.json({ message: 'Profile updated successfully.' });
-          });
-        }
-             
       },
     );
   }
   
+  deleteWorkshop(req, res) {
+    const { id } = req.params;
+    const WorkshopID = parseInt(id); 
+
+    const sql = 'DELETE FROM localpartnerships WHERE WorkshopID = ?';
+    db.query(sql, [WorkshopID], (error, results) => {
+    if (error) {
+        console.error('Error deleting workshop:', error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    if (results.affectedRows === 0) {
+        return res.status(404).json({ error: 'Workshop not found' });
+    }
+
+    res.status(200).json({ message: 'Workshop deleted successfully', WorkshopID: WorkshopID });
+    });
+  }
   
 
 }

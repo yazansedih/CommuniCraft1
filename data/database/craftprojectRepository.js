@@ -53,22 +53,22 @@ updateproj(req, res) {
 }
 deleteproj(req, res) {
     const { id } = req.params; 
-const projectId = parseInt(id); // Parse 'id' as an integer
+    const projectId = parseInt(id); // Parse 'id' as an integer
 
-const sql = 'DELETE FROM craftprojects WHERE ProjectID = ?';
+    const sql = 'DELETE FROM craftprojects WHERE ProjectID = ?';
 
-db.query(sql, [projectId], (error, results) => {
-if (error) {
-    console.error('Error deleting project:', error);
-    return res.status(500).json({ error: 'Internal server error' });
-}
+    db.query(sql, [projectId], (error, results) => {
+    if (error) {
+        console.error('Error deleting project:', error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
 
-if (results.affectedRows === 0) {
-    return res.status(404).json({ error: 'Project not found' });
-}
+    if (results.affectedRows === 0) {
+        return res.status(404).json({ error: 'Project not found' });
+    }
 
-res.status(200).json({ message: 'Project deleted successfully', projectId: projectId });
-});
+    res.status(200).json({ message: 'Project deleted successfully', projectId: projectId });
+    });
 }
 searchproj(req, res) {
     const { id } = req.params;
