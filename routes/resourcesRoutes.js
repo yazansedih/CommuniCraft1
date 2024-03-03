@@ -10,7 +10,10 @@ router.put('/updateResource/:id', authenticateUser,resourcesController.updateRes
 router.delete('/deleteResource/:id',authenticateUser, resourcesController.deleteResource);
 
 
-router.post('/printAll', authenticateUser,resourcesController.printAll);
+
+router.get('/printAll', authenticateUser,resourcesController.printAll);
+router.get('/printmyResource', authenticateUser,resourcesController.printmyResource);
+
 router.get('/availableResource',authenticateUser,resourcesController.availableResource);
 router.get('/ResourceMaxcoast/:maxcoast',authenticateUser,resourcesController.ResourceMaxcoast);
 

@@ -26,5 +26,10 @@ exports.ResourceMaxcoast =  (req, res) => {
     resourcesRepository.ResourceMaxcoast(req,res);
    
 }
+exports.printmyResource =  (req, res) => {
+    resourcesRepository.printmyResource(req,res);
+   
+}
+
 
 
