@@ -143,6 +143,118 @@ class LocalpartnershipRepository {
     });
   }
   
+  searchAllGroups(req, res) {
+    const sql = 'SELECT * FROM `group` WHERE Status = 1';
+
+    db.query(sql, (error, results) => {
+        if (error) {
+            console.error('Error searching for groups:', error);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+
+        res.status(200).json({ groups: results });
+    });
+  }
+
+  searchGroup(req, res) {
+    const { id } = req.params;
+
+    const sql = 'SELECT * FROM `group` WHERE GroupID = ?';
+    db.query(sql, [id], (error, results) => {
+        if (error) {
+            console.error('Error searching for group:', error);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Group not found' });
+        }
+        
+        res.status(200).json({ group: results[0] });
+    });
+  }
+
+  async groupEmployment(req, res) {
+    const { workshopid } = req.params;
+    var { groupid } = req.params;
+
+    try {
+        const [results] = await db.promise().query('SELECT * FROM `group` WHERE GroupID = ? AND Status = 1', [groupid]);
+
+        if (results.length === 0) {
+            groupid = null;
+            return res.status(404).json({ error: 'Group not found or already booked!😯' });
+        }
+
+        // If the group exists and is available, proceed with the update
+        if (groupid !== null) {
+            const updateQuery = `UPDATE localpartnerships SET GroupID = ? WHERE WorkshopID = ?`;
+            const queryValues = [groupid, workshopid];
+
+            db.query(updateQuery, queryValues, (updateError) => {
+                if (updateError) {
+                    return res.status(500).json({ message: 'Group Employment failed.' });
+                }
+
+                const uQuery = `UPDATE \`group\` SET Status = ? WHERE GroupID = ?`;
+                const Values = ['0', groupid];
+                db.query(uQuery, Values, (updateError) => {
+                    if (updateError) {
+                        console.log(updateError);
+                        return res.status(500).json({ message: 'Update Group Status failed.' });
+                    }
+
+                    return res.json({ message: 'Group Employment successfully.' });
+                });
+            });
+        }
+    } catch (error) {
+        console.error('Error employment for group:', error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+
+  layingOffGroup(req, res) {
+    const { workshopid } = req.params;
+    let groupid = null;
+
+    const sql = 'SELECT * FROM localpartnerships WHERE WorkshopID = ?';
+    db.query(sql, [workshopid], (error, results) => {
+        if (error) {
+            console.error('Error workshop for WorkshopID:', error);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+
+        if (results.length !== 0) {
+            groupid = results[0].GroupID;
+        }
+
+        if(groupid !== null){
+          const updateQuery = `UPDATE localpartnerships SET GroupID = ? WHERE WorkshopID = ?`;
+          const queryValues = [null, workshopid];
+  
+          db.query(updateQuery, queryValues, (updateError) => {
+              if (updateError) {
+                  return res.status(500).json({ message: 'Group Laying Off failed.' });
+              }
+  
+              const uQuery = `UPDATE \`group\` SET Status = ? WHERE GroupID = ?`;
+              const Values = ['1', groupid];
+              db.query(uQuery, Values, (updateError) => {
+                  if (updateError) {
+                      console.log(updateError);
+                      return res.status(500).json({ message: 'Group Status failed.' });
+                  }
+  
+                  return res.json({ message: 'Group Laying Off successfully.' });
+              });
+          });
+        } else {
+          return res.status(404).json({ message: 'Workshop not have group!😢' });
+        }
+        
+    });
+  }
 
 }
 
