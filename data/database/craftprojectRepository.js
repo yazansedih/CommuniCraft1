@@ -21,6 +21,7 @@ class CraftprojectRepository {
         if (!Title || !Description || !SkillLevel || !GroupSize || !materials || !Status || !workshopID) {
             return res.status(400).json({ error: 'All fields are required' });
         }
+
     
         // Validate SkillLevel
         if (!['beginner', 'intermediate', 'advanced'].includes(SkillLevel.toLowerCase())) {

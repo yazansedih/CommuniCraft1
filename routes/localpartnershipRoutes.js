@@ -1,33 +1,29 @@
 const express = require('express');
 const localpartnershipController = require('../controllers/localpartnershipController');
-const { authenticateUser } = require('../middlewares/authenticateUser');
+const { authenticateOnwer } = require('../middlewares/authenticateOwner');
+const { authenticateWorkshop } = require('../middlewares/authenticateWorkshop');
 const authController = require('../controllers/authController');
 const UserRepository = require('../data/database/UserRepository');
 
-
 const router = express.Router();
 
-
 // Routes for user registration and authentication
-// router.post('/', localpartnershipController.yourFunction); //api/localpartnerships/
+router.post('/addworkshop', authenticateOnwer, localpartnershipController.addWorkshop); 
 
+router.get('/workshopProfile/:id', authenticateOnwer, localpartnershipController.getWorkshopProfile)
 
+router
+  .patch('/workshopProfile/workshopname/:id', authenticateOnwer, localpartnershipController.updateWorkshopProfile)
+  .patch('/workshopProfile/location/:id', authenticateOnwer, localpartnershipController.updateWorkshopProfile)
+  .patch('/workshopProfile/description/:id', authenticateOnwer, localpartnershipController.updateWorkshopProfile)
+  .patch('/workshopProfile/contactinfo/:id', authenticateOnwer, localpartnershipController.updateWorkshopProfile)
+  .patch('/workshopProfile/cost/:id', authenticateOnwer, localpartnershipController.updateWorkshopProfile)
 
+router.delete('/deleteworkshop/:id', authenticateOnwer, localpartnershipController.deleteWorkshop); 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+router.get('/searchallgroups', authenticateOnwer, localpartnershipController.searchAllGroups); 
+router.get('/searchgroup/:id', authenticateOnwer, localpartnershipController.searchGroup); 
+router.patch('/:workshopid/groupemployment/:groupid', authenticateOnwer, localpartnershipController.groupEmployment); 
+router.patch('/layingoffgroup/:workshopid', authenticateOnwer, localpartnershipController.layingOffGroup)
 
 module.exports = router;

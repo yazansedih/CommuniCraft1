@@ -7,6 +7,9 @@ exports.signup = catchAsync(async (req, res, next) => {
     Username: req.body.username,
     Email: req.body.email,
     Password: req.body.password,
+    UserType: req.body.usertype,
+    Skills: req.body.skills,
+    Interest: req.body.interest,
   };
 
   // Check if the username or email already exists
@@ -17,7 +20,7 @@ exports.signup = catchAsync(async (req, res, next) => {
       type: sequelize.QueryTypes.SELECT,
     },
   );
-
+  
   if (existingUser.length > 0) {
     return res.status(409).json({
       status: 'error',
@@ -36,23 +39,31 @@ exports.signup = catchAsync(async (req, res, next) => {
 
     newUser.Password = hashedPassword;
     const date = new Date();
+    
+    var skillss = null;
+    var craftInterestJSON = null;
+    if(newUser.UserType == "artisan") {
+      skillss = newUser.Skills;
+      craftInterestJSON = newUser.Interest && Array.isArray(newUser.Interest) ? JSON.stringify(newUser.Interest) : null;
+    }
+    
 
     try {
       await sequelize.query(
-        'INSERT INTO users (Username, Password, Email, Role, CraftSkill, CraftInterest, ProfilePicture, PartnerShipID, RegistrationDate, LastLoginDate, Active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        'INSERT INTO users (Username, Password, Email, userType, CraftSkill, CraftInterest, ProfilePicture, RegistrationDate, LastLoginDate, Active, GroupID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         {
           replacements: [
             newUser.Username,            
             newUser.Password,
             newUser.Email,
-            'user',
-            null,
-            null,
-            null,
-            null,
+            newUser.UserType,
+            skillss,
+            craftInterestJSON,
+            null,            
             date,
+            null,            
+            '1', 
             null,
-            '1',            
           ],
           type: sequelize.QueryTypes.INSERT,
         },
@@ -70,4 +81,21 @@ exports.signup = catchAsync(async (req, res, next) => {
       });
     }
   });
+
+
+
+
+
+
+  
 });
+
+
+
+
+
+
+
+
+
+
