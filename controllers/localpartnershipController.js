@@ -19,3 +19,19 @@ exports.addWorkshop = (req, res) => {
   exports.deleteWorkshop = (req, res) => {
     localpartnershipRepository.deleteWorkshop(req, res);
   }
+
+  exports.searchAllGroups = (req, res) =>{
+    localpartnershipRepository.searchAllGroups(req,res);
+  }
+
+  exports.searchGroup = (req, res) => {
+    localpartnershipRepository.searchGroup(req,res);
+  }
+
+  exports.groupEmployment = (req, res) => {
+    localpartnershipRepository.groupEmployment(req,res);
+  }
+
+  exports.layingOffGroup = (req, res) => {
+    localpartnershipRepository.layingOffGroup(req,res);
+  }

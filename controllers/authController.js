@@ -39,8 +39,14 @@ exports.signup = catchAsync(async (req, res, next) => {
 
     newUser.Password = hashedPassword;
     const date = new Date();
-
-    const craftInterestJSON = newUser.Interest && Array.isArray(newUser.Interest) ? JSON.stringify(newUser.Interest) : null;
+    
+    var skillss = null;
+    var craftInterestJSON = null;
+    if(newUser.UserType == "artisan") {
+      skillss = newUser.Skills;
+      craftInterestJSON = newUser.Interest && Array.isArray(newUser.Interest) ? JSON.stringify(newUser.Interest) : null;
+    }
+    
 
     try {
       await sequelize.query(
@@ -51,8 +57,8 @@ exports.signup = catchAsync(async (req, res, next) => {
             newUser.Password,
             newUser.Email,
             newUser.UserType,
-            newUser.Skills,
-            craftInterestJSON, // Insert the JSON string of CraftInterest
+            skillss,
+            craftInterestJSON,
             null,            
             date,
             null,            

@@ -19,10 +19,11 @@ router
   .patch('/workshopProfile/contactinfo/:id', authenticateOnwer, localpartnershipController.updateWorkshopProfile)
   .patch('/workshopProfile/cost/:id', authenticateOnwer, localpartnershipController.updateWorkshopProfile)
 
-
-// router.get('/searchgroups', authenticateOnwer, localpartnershipController.searchGroups); 
-// router.post('/groupemployment', authenticateOnwer, localpartnershipController.groupEmployment); 
-
 router.delete('/deleteworkshop/:id', authenticateOnwer, localpartnershipController.deleteWorkshop); 
+
+router.get('/searchallgroups', authenticateOnwer, localpartnershipController.searchAllGroups); 
+router.get('/searchgroup/:id', authenticateOnwer, localpartnershipController.searchGroup); 
+router.patch('/:workshopid/groupemployment/:groupid', authenticateOnwer, localpartnershipController.groupEmployment); 
+router.patch('/layingoffgroup/:workshopid', authenticateOnwer, localpartnershipController.layingOffGroup)
 
 module.exports = router;
