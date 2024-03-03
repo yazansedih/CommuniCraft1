@@ -1,35 +1,39 @@
 const express = require('express');
 const craftprojectController = require('../controllers/craftprojectController');
+const { authenticateCustomer } = require('../middlewares/authenticateCustomer');
 const { authenticateUser } = require('../middlewares/authenticateUser');
 const authController = require('../controllers/authController');
 const { authenticateAdmin } = require('../middlewares/authenticateAdmin');
 
 const router = express.Router();
 
-router.post('/addproject',authenticateAdmin,craftprojectController.addproject);
-router.put('/updateproject/:id', authenticateAdmin,craftprojectController.updateproject);
-router.delete('/deleteproject/:id', authenticateAdmin,craftprojectController.deleteproject);
-router.get('/searchproject/:id', authenticateAdmin,craftprojectController.searchproject);
 
-router.get('/searchALLprojects', authenticateUser,craftprojectController.searchALLprojects);
-router.get('/searchALLprojects', authenticateAdmin,craftprojectController.searchALLprojects);
+router.post('/addproject', authenticateCustomer || authenticateAdmin, craftprojectController.addproject);
 
 
-router.get('/searchprojectbySkillLevel/:SkillLevel', authenticateAdmin,craftprojectController.searchprojectbySkillLevel);
-router.get('/searchprojectbyGroupSize/:GroupSize', authenticateAdmin,craftprojectController.searchprojectbyGroupSize);
+router.put('/updateproject/:id',authenticateCustomer || authenticateAdmin,craftprojectController.updateproject);
+router.delete('/deleteproject/:id', authenticateCustomer || authenticateAdmin,craftprojectController.deleteproject);
+router.get('/myProjects', authenticateCustomer, craftprojectController.myProjects);
 
 
+//router.get('/searchproject/:id', authenticateCustomer || authenticateAdmin,craftprojectController.searchproject);
 
-router.get('/searchprojectbyTitle/:Title', authenticateUser,craftprojectController.searchprojectbyTitle);
-router.get('/searchprojectbyTitle/:Title', authenticateAdmin,craftprojectController.searchprojectbyTitle);
-
-
-router.get('/getTitleById/:id', authenticateAdmin,craftprojectController.getTitleById);
-
-router.get('/searchprojectbymaterial/:material', authenticateAdmin,craftprojectController.searchprojectbymaterial);
+router.get('/searchALLprojects',craftprojectController.searchALLprojects);
 
 
 
+router.get('/searchprojectbySkillLevel/:SkillLevel', authenticateCustomer || authenticateAdmin,craftprojectController.searchprojectbySkillLevel);
+router.get('/searchprojectbyGroupSize/:GroupSize', authenticateCustomer || authenticateAdmin,craftprojectController.searchprojectbyGroupSize);
+
+
+
+ router.get('/searchprojectbyTitle/:Title',craftprojectController.searchprojectbyTitle);
+
+
+
+// router.get('/getTitleById/:id', authenticateCustomer || authenticateAdmin,craftprojectController.getTitleById);
+
+router.get('/searchprojectbymaterial/:material', authenticateCustomer || authenticateAdmin,craftprojectController.searchprojectbymaterial);
 
 
 
