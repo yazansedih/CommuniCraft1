@@ -15,7 +15,9 @@ app.use(express.json());
 app.use(sessionConfig);
 
 const userRouter = require('./routes/userRoutes');
+
 const skillsRouter = require('./routes/skillsRoutes'); 
+
 const companiesRoutes = require('./routes/companiesRoutes'); 
 const localpartnershipRouter = require('./routes/localpartnershipRoutes');
 const craftprojectRouter = require('./routes/craftprojectRoutes'); 
@@ -31,7 +33,9 @@ const {
 } = require('./services/SocketService');
 
 app.use('/api/users', userRouter);
+
 app.use('/api/skills', skillsRouter);
+
 app.use('/api/companies', companiesRoutes);
 app.use('/api/localpartnerships', localpartnershipRouter);
 app.use('/api/craftprojects', craftprojectRouter);

@@ -133,6 +133,7 @@ class UserRepository {
         }
       },
     );
+    
   };
 
   getUserProfile(req, res) {
