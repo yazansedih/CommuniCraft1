@@ -27,10 +27,14 @@ exports.addproject= (req, res) => {
   exports.searchprojectbyTitle= (req, res) => {
     craftprojectRepository.searchprojbyTitle(req,res);
   };
-  exports.getTitleById= (req, res) => {
-    craftprojectRepository.getTitleById(req,res);
-  };
+  // exports.getTitleById= (req, res) => {
+  //   craftprojectRepository.getTitleById(req,res);
+  // };
   
   exports.  searchprojectbymaterial= (req, res) => {
     craftprojectRepository.  searchprojectbymaterial(req,res);
   };
+  exports.myProjects= (req, res) => {
+    craftprojectRepository. myProjects(req,res);
+  };
+  
