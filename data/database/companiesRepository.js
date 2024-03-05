@@ -1,6 +1,3 @@
-const ScoreRepository = require('./ScoreRepository');
-const scoreRepository = new ScoreRepository();
-
 const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 
@@ -240,12 +237,12 @@ class CompaniesRepository {
           [companyId],
           (deleteError, deleteResults) => {
               if (deleteError) {
-                  return res.status(500).json({ message: 'Company deletion failed.' });
+                  return res.status(500).json({ message: 'Company deletion failed!' });
               }
       
               // Check if any rows were affected by the delete operation
               if (deleteResults.affectedRows === 0) {
-                  return res.status(404).json({ message: 'Company not found.' });
+                  return res.status(404).json({ message: 'Company not found!' });
               }
               
               req.session.destroy((destroyError) => {
@@ -262,6 +259,124 @@ class CompaniesRepository {
     );
   }  
 
+  searchAllWorkshops(req, res){
+    const sql = 'SELECT * FROM localpartnerships';
+
+    db.query(sql, (error, results) => {
+        if (error) {
+            console.error('Error searching for workshops:', error);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+
+        res.status(200).json({ workshops: results });
+    });
+  }
+
+  searchWorkshop(req, res) {
+    const { workshopid } = req.params;
+
+    const sql = 'SELECT * FROM localpartnerships WHERE WorkshopID = ?';
+    db.query(sql, [workshopid], (error, results) => {
+        if (error) {
+            console.error('Error searching for Workshop:', error);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Workshop not found' });
+        }
+        
+        res.status(200).json({ workshop: results[0] });
+    });
+  }
+
+  searchWorkshopiSupport(req,res){
+    const { companyId } = req.session;
+
+    const sql = 'SELECT * FROM collaboration WHERE CompanyID = ?';
+    db.query(sql, [companyId], (error, results) => {
+        if (error) {
+            console.error('Error searching for Workshop:', error);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Workshop that you support not found!' });
+        }
+        
+        res.status(200).json({ workshop: results });
+    });
+  }
+
+  provideSupportWorkshop(req, res) {
+    const { companyId } = req.session;
+    const { workshopid } = req.params;
+    const { description } = req.body;
+    
+    db.query(
+      'SELECT * FROM localpartnerships WHERE WorkshopID = ?',
+      [workshopid],
+      (error, results) => {
+        if (error) {
+          console.error('Error checking workshop:', error);
+          return res.status(500).json({ error: 'Internal server error' });
+        }
+    
+        if (results.length === 0) {
+          return res.status(404).json({ error: 'Workshop not found' });
+        }
+        
+        const sql = 'SELECT * FROM collaboration WHERE CompanyID = ? AND WorkshopID = ?';
+        db.query(sql, [companyId, workshopid], (error, results) => {
+          if (error) {
+            console.error('Error Workshop supporting:', error);
+            return res.status(500).json({ error: 'Internal server error' });
+          }
+
+          if (results.length !== 0) {
+            return res.status(404).json({ error: 'Collaboration already existing!😊'});        
+          }
+          else {
+            const date = new Date();
+            const sql = 'INSERT INTO collaboration (CompanyID, WorkshopID, Description, RegistrationDate, Status) VALUES (?, ?, ?, ?, ?)';
+            db.query(sql, [companyId, workshopid, description, date, '0'], (error, results) => {
+                if (error) {
+                    console.error('Error make collaboration:', error);
+                    return res.status(500).json({ error: 'Internal server error' });
+                }
+
+                res.status(201).json({ message: 'Collaboration successfully.😊', collaborationID: results.insertId });
+            });
+          }
+        });
+      }
+    );
+  }
+
+  cancelSupportWorkshop(req, res) {
+    const { companyId } = req.session;
+    const { workshopid } = req.params;
+
+    const sql = 'DELETE FROM collaboration WHERE CompanyID = ? AND WorkshopID = ?';
+      db.query(sql, [companyId, workshopid], (error, results) => {
+        if (error) {
+          console.error('Error Workshop supporting:', error);
+          return res.status(500).json({ error: 'Collaboration deletion failed!' });
+        }
+
+        if (results.length === 0) {
+          return res.status(404).json({ error: 'Collaboration not found!'});        
+        }                    
+
+        req.session.destroy((destroyError) => {
+          if (destroyError) {
+              return res.status(500).json({ message: 'Error destroying session.' });
+          }
+
+          return res.json({ message: 'Collaboration deletion successfully!😊' });
+        });
+      });
+  }
 
 }
 

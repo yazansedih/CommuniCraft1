@@ -1,6 +1,3 @@
-const ScoreRepository = require('./ScoreRepository');
-const scoreRepository = new ScoreRepository();
-
 const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 

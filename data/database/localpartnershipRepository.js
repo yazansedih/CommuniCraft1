@@ -1,6 +1,3 @@
-const ScoreRepository = require('./ScoreRepository');
-const scoreRepository = new ScoreRepository();
-
 const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 
@@ -10,7 +7,6 @@ const db = mysql.createConnection({
   password: '123456',
   database: 'advdatabase',
 });
-
 class LocalpartnershipRepository {
 
   addWorkshop(req, res) {
