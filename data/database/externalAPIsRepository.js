@@ -1,6 +1,8 @@
 const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 const axios = require('axios');
+require('dotenv').config();
+
 
 const db = mysql.createConnection({
   host: 'localhost',
@@ -12,9 +14,7 @@ const db = mysql.createConnection({
 class ExternalAPIsRepository {
     weather(req, res) {
         const { workshopid } = req.params; 
-    
-        var location;
-    
+        
         const sql = 'SELECT Location FROM localpartnerships WHERE WorkshopID = ?';
         db.query(sql, [workshopid], async (error, results) => {
             if (error) {
@@ -22,26 +22,28 @@ class ExternalAPIsRepository {
                 return res.status(500).json({ error: 'Internal server error' });
             }
     
-            const city = results[0];
+            const city = results[0].Location;
+            const capitalizedCity = city.charAt(0).toUpperCase() + city.slice(1);
+            
             const apiKey = "ae9ea459294b4fd922724f65e987d22f";
-            const APIUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+            const APIUrl = `https://api.openweathermap.org/data/2.5/weather?q=${capitalizedCity}&appid=${apiKey}&units=metric`;
             let weather;
-            let err = null;
     
             try {
-                const response = await axios.get(APIUrl)
+                const response = await axios.get(APIUrl);
                 weather = response.data;
-                console.log(response);                
             } catch(err) {
                 weather = null;
                 console.error('Error fetching weather data:', err);
                 return res.status(500).json({ error: 'Failed to fetch weather data!😢' });
             }
     
-            res.render("index", {weather, err});
-            // res.status(200).json({ weather });
+            res.status(200).json({ weather });
         });
     }
+
+
+
     
 
 }
