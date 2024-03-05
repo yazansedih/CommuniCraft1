@@ -32,3 +32,26 @@ exports.loginCompany = async (req, res) => {
   exports.deleteCompany = (req, res) => {
     companiesRepository.deleteCompany(req, res);
   };
+
+
+
+
+  exports.searchAllWorkshops = (req,res) => {
+    companiesRepository.searchAllWorkshops(req, res);
+  }
+
+  exports.searchWorkshop = (req,res) => {
+    companiesRepository.searchWorkshop(req, res);
+  }
+
+  exports.searchWorkshopiSupport = (req, res) => {
+    companiesRepository.searchWorkshopiSupport(req, res);
+  }
+
+  exports.provideSupportWorkshop = (req,res) => {
+    companiesRepository.provideSupportWorkshop(req, res);
+  }
+
+  exports.cancelSupportWorkshop = (req,res) => {
+    companiesRepository.cancelSupportWorkshop(req, res);
+  }
