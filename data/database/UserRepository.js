@@ -380,7 +380,7 @@ class UserRepository {
       return res.status(400).json({ message: "Invalid message data." });
     }
     db.query(
-      "SELECT GroupID FROM users WHERE UserID = ?", //GroupID
+      "SELECT GroupID FROM users WHERE UserID = ? AND userType = 'artisan'", //GroupID
       [userId],
       (Error, ress) => {
         if (Error) {
@@ -435,7 +435,7 @@ class UserRepository {
     const { userId } = req.session;
 
     db.query(
-      "SELECT GroupID FROM users WHERE UserID = ?",
+      "SELECT GroupID FROM users WHERE UserID = ? AND userType = 'artisan'",
       [userId],
       (Error, ress) => {
         if (Error) {
@@ -475,7 +475,6 @@ class UserRepository {
       [userId],
       (insertError, results) => {
         if (insertError) {
-          console.log("1111111", results);
           return res.status(400).json({ message: "Communication not found!😢" });
         }
         
@@ -521,7 +520,7 @@ class UserRepository {
     const { userId } = req.session;
 
     db.query(
-      "DELETE FROM communication WHERE SenderID = ? OR ReceiverID = ? AND (SenderType = 'user' OR ReceiverType = 'user')",
+      "DELETE FROM communication WHERE (SenderID = ? OR ReceiverID = ?) AND (SenderType = 'user' OR ReceiverType = 'user')",
       [userId, userId],
       (insertError, results) => {
         if (insertError) {
