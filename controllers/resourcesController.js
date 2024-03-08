@@ -30,6 +30,11 @@ exports.printmyResource =  (req, res) => {
     resourcesRepository.printmyResource(req,res);
    
 }
+exports.countMyResources =  (req, res) => {
+    resourcesRepository.countMyResources(req,res);
+   
+}
+
 
 
 
