@@ -30,4 +30,15 @@ router.delete('/delete', userController.deleteAccount);
 
 router.get('/logout', authenticateUser, userController.logoutUser);
 
+
+router.post('/communication/sendmessagetouser', authenticateUser, userController.sendMessageToUser);
+router.post('/communication/sendmessagetogroup', authenticateUser, userController.sendMessageToGroup);
+router.get('/communication/receivedMessages', authenticateUser, userController.receivedMessages);
+router.get('/communication/sentMessages', authenticateUser, userController.sentMessages);
+router.get('/communication/receivedGroupMessages', authenticateUser, userController.receivedGroupMessages);
+
+router.delete('/communication/deleteMessage/:messageid', authenticateUser, userController.deleteMessage);
+router.delete('/communication/deleteMessageHistory', authenticateUser, userController.deleteMessageHistory);
+
+
 module.exports = router;

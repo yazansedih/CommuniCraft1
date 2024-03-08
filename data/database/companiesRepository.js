@@ -58,6 +58,7 @@ class CompaniesRepository {
             );
 
             req.session.companyId = company.CompanyID;
+            req.session.type = "company"; 
             return res.status(200).json({ message: 'Company login successfully.' });
           },
         );

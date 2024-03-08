@@ -22,9 +22,11 @@ const companiesRoutes = require('./routes/companiesRoutes');
 const localpartnershipRouter = require('./routes/localpartnershipRoutes');
 const craftprojectRouter = require('./routes/craftprojectRoutes'); 
 const resourcesRouter = require('./routes/resourcesRoutes');
+
 const communicationRouter = require('./routes/communicationRoutes');
 const finishedprojectRouter = require('./routes/finishedprojectRoutes');
-// const externalAPIs = require('./routes/external-APIsRoutes');
+const externalAPIs = require('./routes/externalAPIsRoutes');
+
 
 const {
   addUserSocket,
@@ -40,7 +42,6 @@ app.use('/api/companies', companiesRoutes);
 app.use('/api/localpartnerships', localpartnershipRouter);
 app.use('/api/craftprojects', craftprojectRouter);
 app.use('/api/resources', resourcesRouter);
-app.use('/api/communications', communicationRouter);
 app.use('/api/finishedprojects', finishedprojectRouter);
 // app.use('/api/external-api', externalAPIs);
 
