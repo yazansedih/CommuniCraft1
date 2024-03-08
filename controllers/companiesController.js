@@ -33,9 +33,6 @@ exports.loginCompany = async (req, res) => {
     companiesRepository.deleteCompany(req, res);
   };
 
-
-
-
   exports.searchAllWorkshops = (req,res) => {
     companiesRepository.searchAllWorkshops(req, res);
   }
@@ -54,4 +51,24 @@ exports.loginCompany = async (req, res) => {
 
   exports.cancelSupportWorkshop = (req,res) => {
     companiesRepository.cancelSupportWorkshop(req, res);
+  }
+
+  exports.sendMessage = (req, res) => {
+    companiesRepository.sendMessage(req,res);
+  }
+
+  exports.receivedMessages = (req, res) => {
+    companiesRepository.receivedMessages(req,res);
+  }
+
+  exports.sentMessages = (req, res) => {
+    companiesRepository.sentMessages(req,res);
+  }
+
+  exports.deleteMessage = (req, res) => {
+    companiesRepository.deleteMessage(req,res);
+  }
+
+  exports.deleteMessageHistory = (req, res) => {
+    companiesRepository.deleteMessageHistory(req,res);
   }

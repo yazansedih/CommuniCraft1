@@ -10,6 +10,7 @@ const router = express.Router();
 // Routes for user registration and authentication
 router.post('/addworkshop', authenticateOnwer, localpartnershipController.addWorkshop); 
 
+router.get('/myWorkshops', authenticateOnwer, localpartnershipController.myWorkshops)
 router.get('/workshopProfile/:id', authenticateOnwer, localpartnershipController.getWorkshopProfile)
 
 router
@@ -29,5 +30,12 @@ router.delete('/layingoffgroup/:workshopid', authenticateOnwer, localpartnership
 
 router.get('/:workshopid/myprojects', authenticateOnwer, localpartnershipController.myProjects); 
 router.get('/:workshopid/searchproject/:projectid', authenticateOnwer, localpartnershipController.searchProject);
+
+router.post('/communication/sendMessage/:workshopid', authenticateOnwer, localpartnershipController.sendMessage);
+router.get('/communication/receivedMessages/:workshopid', authenticateOnwer, localpartnershipController.receivedMessages);
+router.get('/communication/sentMessages/:workshopid', authenticateOnwer, localpartnershipController.sentMessages);
+router.delete('/:workshopid/communication/deleteMessage/:messageid', authenticateOnwer, localpartnershipController.deleteMessage);
+router.delete('/communication/deleteMessageHistory/:workshopid', authenticateOnwer, localpartnershipController.deleteMessageHistory);
+
 
 module.exports = router;

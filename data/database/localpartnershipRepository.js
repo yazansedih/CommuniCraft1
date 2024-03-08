@@ -32,11 +32,30 @@ class LocalpartnershipRepository {
     );
   }
 
+  myWorkshops(req, res) {
+    const { userId } = req.session;
+
+    const sql = "SELECT * FROM localpartnerships WHERE OwnerID = ?";
+    db.query(sql, [userId], (error, results) => {
+      if (error) {
+        console.error("Error searching for Workshop:", error);
+        return res.status(500).json({ error: "Internal server error" });
+      }
+
+      if (results.length === 0) {
+        return res.status(404).json({ error: "Yow have not workshop!😢" });
+      }
+
+      res.status(200).json({ Workshops: results });
+    });
+  }
+
   getWorkshopProfile(req, res) {
+    const { userId } = req.session;
     const { id } = req.params;
 
-    const sql = "SELECT * FROM localpartnerships WHERE WorkshopID = ?";
-    db.query(sql, [id], (error, results) => {
+    const sql = "SELECT * FROM localpartnerships WHERE WorkshopID = ? AND OwnerID = ?";
+    db.query(sql, [id, userId], (error, results) => {
       if (error) {
         console.error("Error searching for Workshop:", error);
         return res.status(500).json({ error: "Internal server error" });
@@ -211,6 +230,7 @@ class LocalpartnershipRepository {
   }
 
   async groupEmployment(req, res) {
+    const { userId } = req.session;
     const { workshopid } = req.params;
     var { groupid } = req.params;
   
@@ -233,6 +253,10 @@ class LocalpartnershipRepository {
         const uQuery = `UPDATE \`group\` SET Status = ? WHERE GroupID = ?`;
         const Values = ["1", groupid];
         await db.promise().query(uQuery, Values);
+
+        const uUserQuery = `UPDATE users SET GroupID = ? WHERE UserID = ?`;
+        const qUserValues = [groupid, userId];
+        await db.promise().query(uUserQuery, qUserValues);
   
         return res.json({ message: "Group Employment successfully." });
       }
@@ -322,7 +346,221 @@ class LocalpartnershipRepository {
 
   }
 
+  sendMessage(req, res) {
+    const { userId } = req.session.userId;
+    const { to, message, ReceiverType } = req.body;
+    const { workshopid } = req.params;
+
+    if (!(to && message)) {
+      return res.status(400).json({ message: "Invalid message data." });
+    }
+
+    db.query(
+      "SELECT * FROM localpartnerships WHERE WorkshopID = ?",
+      [workshopid],
+      (userError, userResults) => {
+        if (userError) {
+          console.error("Error:", userError);
+          return res.status(500).json({ message: "Internal server error." });
+        }
+
+        if (userResults.length === 0) {
+          return res.status(404).json({ message: "The workshop does not exist!😢" });
+        }
+
+        if(ReceiverType == 'group') { //group
+          db.query(
+            "SELECT * FROM localpartnerships WHERE WorkshopID = ? AND GroupID = ?",
+            [workshopid, to],
+            (userError, userResults) => {
+              if (userError) {
+                console.error("Error:", userError);
+                return res.status(500).json({ message: "Internal server error." });
+              }
+      
+              if (userResults.length === 0) {
+                return res.status(404).json({ message: "The Group does not exist!😢" });
+              }
+
+              const registrationDate = new Date();
+              db.query(
+                "INSERT INTO communication (SenderID, ReceiverID, Message, SenderType, ReceiverType, Timestamp) VALUES (?, ?, ?, ?, ?, ?)",
+                [workshopid, to, message, 'workshop', 'group', registrationDate],
+                (insertError) => {
+                  if (insertError) {
+                    return res.status(400).json({ message: "Communication failed😢!" });
+                  }
+
+                  return res.status(200).json({ message: "Communication successfully😊." });
+                }
+              );
+            }
+          );
+        }
+        else if(ReceiverType == 'company') { // company
+          db.query(
+            "SELECT * FROM collaboration WHERE WorkshopID = ? AND CompanyID = ?",
+            [workshopid, to],
+            (userError, userResults) => {
+              if (userError) {
+                console.error("Error:", userError);
+                return res.status(500).json({ message: "Internal server error." });
+              }
+      
+              if (userResults.length === 0) {
+                return res.status(404).json({ message: "The company does not exist!😢" });
+              }
+
+              const registrationDate = new Date();
+              db.query(
+                "INSERT INTO communication (SenderID, ReceiverID, Message, SenderType, ReceiverType, Timestamp) VALUES (?, ?, ?, ?, ?, ?)",
+                [workshopid, to, message, 'workshop', 'company', registrationDate],
+                (insertError) => {
+                  if (insertError) {
+                    return res.status(400).json({ message: "Communication failed😢!" });
+                  }
+
+                  return res.status(200).json({ message: "Communication successfully😊." });
+                }
+              );
+            }
+          );
+        }
+        else if(ReceiverType == 'project') {
+          db.query(
+            "SELECT * FROM craftprojects WHERE WorkshopID = ? AND ProjectID = ?",
+            [workshopid, to],
+            (userError, userResults) => {
+              if (userError) {
+                console.error("Error:", userError);
+                return res.status(500).json({ message: "Internal server error." });
+              }
+      
+              if (userResults.length === 0) {
+                return res.status(404).json({ message: "The project does not exist!😢" });
+              }
+
+              const registrationDate = new Date();
+              db.query(
+                "INSERT INTO communication (SenderID, ReceiverID, Message, SenderType, ReceiverType, Timestamp) VALUES (?, ?, ?, ?, ?, ?)",
+                [workshopid, to, message, 'workshop', 'project', registrationDate],
+                (insertError) => {
+                  if (insertError) {
+                    return res.status(400).json({ message: "Communication failed😢!" });
+                  }
+
+                  return res.status(200).json({ message: "Communication successfully😊." });
+                }
+              );
+            }
+          );
+        }
+        else {
+          return res.status(404).json({ message: "The ReceiverType does not exist!😢" });
+        }
+      }
+    );
+
+
+  }
+
+  receivedMessages(req,res) {
+    const { userId } = req.session.userId;
+    const { workshopid } = req.params;
+
+    db.query(
+      "SELECT * FROM communication WHERE ReceiverID = ? AND (ReceiverType = 'workshop')",
+      [workshopid],
+      (insertError, results) => {
+        if (insertError) {
+          console.log("1111111", results);
+          return res.status(400).json({ message: "Communication not found!😢" });
+        }
+        
+        return res.status(200).json({ receivedMessages: results });
+      }
+    );
+  }
+
+  sentMessages(req,res) {
+    const { userId } = req.session.userId;
+    const { workshopid } = req.params;
+
+    db.query(
+      "SELECT * FROM communication WHERE SenderID = ? AND SenderType = 'workshop'",
+      [workshopid],
+      (insertError, results) => {
+        if (insertError) {
+          return res.status(400).json({ message: "Communication not found!😢" });
+        }
+        
+        return res.status(200).json({ sentMessages: results });
+      }
+    );
+  }
+
+  deleteMessage(req,res) {
+    const { userId } = req.session;
+    const { workshopid, messageid } = req.params;
+
+    db.query(
+      "SELECT * FROM localpartnerships WHERE WorkshopID = ? AND OwnerID = ?",
+      [workshopid, userId],
+      (insertError, results) => {
+        if (insertError) {
+          return res.status(500).json({ message: "Internal server error." });
+        }
+
+        if(results.length === 0){
+          return res.status(403).json({message:"Workshop not found!😢"});
+        }
+
+        db.query(
+          "DELETE FROM communication WHERE MessageID = ? AND (SenderType = 'workshop' OR ReceiverType = 'workshop')",
+          [messageid],
+          (insertError, results) => {
+            if (insertError) {
+              return res.status(400).json({ message: "Communication not found!😢" });
+            }
+            
+            return res.json({ message: 'Delete message successfully.😊' });
+          }
+        );    
+      }
+    );
   
+  }
+
+  deleteMessageHistory(req,res) {
+    const { userId } = req.session;
+    const { workshopid } = req.params;
+
+    db.query(
+      "SELECT * FROM localpartnerships WHERE WorkshopID = ? AND OwnerID = ?",
+      [workshopid, userId],
+      (insertError, results) => {
+        if (insertError) {
+          return res.status(500).json({ message: "Internal server error." });
+        }
+
+        if(results.length === 0){
+          return res.status(403).json({message:"Workshop not found!😢"});
+        }
+
+        db.query(
+          "DELETE FROM communication WHERE (SenderID = ? OR ReceiverID = ?) AND (SenderType = 'workshop' OR ReceiverType = 'workshop')",
+          [workshopid, workshopid],
+          (insertError, results) => {
+            if (insertError) {
+              return res.status(400).json({ message: "Communication not found!😢" });
+            }
+            
+            return res.json({ message: 'Delete message successfully.😊' });
+          }
+        );    
+      }
+    );
+  }
 
 }
 

@@ -29,13 +29,17 @@ router.get('/logout', companiesController.logoutCompany);
 
 
 router.get('/searchallworkshops', companiesController.searchAllWorkshops);
-
 router.get('/searchworkshop/:workshopid', companiesController.searchWorkshop);
-
 router.get('/searchworkshopisupport', companiesController.searchWorkshopiSupport);
-
 router.post('/providesupportworkshop/:workshopid', companiesController.provideSupportWorkshop);
 
 router.delete('/cancelsupportworkshop/:workshopid', companiesController.cancelSupportWorkshop);
+router.delete('/cancelsupportworkshop/:workshopid', companiesController.cancelSupportWorkshop);
+
+router.post('/communication/sendMessage', companiesController.sendMessage);
+router.get('/communication/receivedMessages', companiesController.receivedMessages);
+router.get('/communication/sentMessages', companiesController.sentMessages);
+router.delete('/communication/deleteMessage/:messageid', companiesController.deleteMessage);
+router.delete('/communication/deleteMessageHistory', companiesController.deleteMessageHistory);
 
 module.exports = router;
