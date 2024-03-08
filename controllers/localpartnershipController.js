@@ -28,10 +28,22 @@ exports.addWorkshop = (req, res) => {
     localpartnershipRepository.searchGroup(req,res);
   }
 
+  exports.searchBookedGroup = (req, res) => {
+    localpartnershipRepository.searchBookedGroup(req,res);
+  }
+
   exports.groupEmployment = (req, res) => {
     localpartnershipRepository.groupEmployment(req,res);
   }
 
   exports.layingOffGroup = (req, res) => {
     localpartnershipRepository.layingOffGroup(req,res);
+  }
+
+  exports.myProjects = (req, res) => {
+    localpartnershipRepository.myProjects(req,res);
+  }
+
+  exports.searchProject = (req, res) => {
+    localpartnershipRepository.searchProject(req,res);
   }
