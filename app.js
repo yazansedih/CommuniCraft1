@@ -9,20 +9,22 @@ const port = 3000;
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
-const sessionConfig = require('./middlewares/sessionConfig');
+const sessionConfig = require('./middlewares/sessionConfig'); // Import the session configuration module
 
 app.use(express.json());
 app.use(sessionConfig);
 
 const userRouter = require('./routes/userRoutes');
+
 const skillsRouter = require('./routes/skillsRoutes'); 
+
 const companiesRoutes = require('./routes/companiesRoutes'); 
 const localpartnershipRouter = require('./routes/localpartnershipRoutes');
 const craftprojectRouter = require('./routes/craftprojectRoutes'); 
 const resourcesRouter = require('./routes/resourcesRoutes');
 const communicationRouter = require('./routes/communicationRoutes');
-const finishedprojectRouter = require('./routes/finishedprojectRoutes');  
-const externalAPIs = require('./routes/externalAPIsRoutes');
+const finishedprojectRouter = require('./routes/finishedprojectRoutes');
+// const externalAPIs = require('./routes/external-APIsRoutes');
 
 const {
   addUserSocket,
@@ -31,14 +33,16 @@ const {
 } = require('./services/SocketService');
 
 app.use('/api/users', userRouter);
+
 app.use('/api/skills', skillsRouter);
+
 app.use('/api/companies', companiesRoutes);
 app.use('/api/localpartnerships', localpartnershipRouter);
 app.use('/api/craftprojects', craftprojectRouter);
 app.use('/api/resources', resourcesRouter);
 app.use('/api/communications', communicationRouter);
 app.use('/api/finishedprojects', finishedprojectRouter);
-app.use('/api/externalapi', externalAPIs);
+// app.use('/api/external-api', externalAPIs);
 
 io.on('connection', (socket) => {
   console.log('A user connected');
