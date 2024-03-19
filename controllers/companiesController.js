@@ -4,7 +4,7 @@ const companiesRepository = new CompaniesRepository();
 
 
 // exports.functionName = (req, res) => { companiesRepository.functionName }
-exports.loginCompany = async (req, res) => {
+  exports.loginCompany = async (req, res) => {
     try {
       if (req.session.companyId) {
         return res.status(208).json({ message: 'Company is already logged in.' });

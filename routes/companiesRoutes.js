@@ -27,7 +27,6 @@ router.delete('/delete', companiesController.deleteCompany);
 
 router.get('/logout', companiesController.logoutCompany);
 
-
 router.get('/searchallworkshops', companiesController.searchAllWorkshops);
 router.get('/searchworkshop/:workshopid', companiesController.searchWorkshop);
 router.get('/searchworkshopisupport', companiesController.searchWorkshopiSupport);

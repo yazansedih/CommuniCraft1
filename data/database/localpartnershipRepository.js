@@ -309,10 +309,48 @@ class LocalpartnershipRepository {
     });
   }
 
+  pendingProjects(req, res) {
+    const { workshopid } = req.params;
+    const { projectid, cost } = req.body;
+
+    const sql = "SELECT * FROM craftprojects WHERE WorkshopID = ? AND ProjectID = ? AND Status IS NULL";
+    db.query(sql, [workshopid, projectid], (error, results) => {
+      if (error) {
+        console.error("Error project for WorkshopID:", error);
+        return res.status(500).json({ error: "Internal server error" });
+      }
+
+      if (results.length === 0) {
+        return res.status(404).json({ message: "project not found!😢" });
+      }
+
+      return res.status(200).json({ projects: results });
+    });
+  }
+
+  acceptProject(req, res) {
+    const { workshopid } = req.params;
+    const { projectid, cost } = req.body;
+
+    const sql = "UPDATE craftprojects SET Cost = ?, Status = ? WHERE WorkshopID = ? AND ProjectID = ? AND Status IS NULL";
+    db.query(sql, [cost, '0', workshopid, projectid], (error, results) => {
+      if (error) {
+        console.error("Error booking project for WorkshopID:", error);
+        return res.status(500).json({ error: "Internal server error" });
+      }
+
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ message: "Project not found or already booked!😢" });
+      }
+
+      return res.status(200).json({ message: "Project book successfully!" });
+    });
+  }
+
   myProjects(req, res) {
     const { workshopid } = req.params;
 
-    const sql = "SELECT * FROM craftprojects WHERE WorkshopID = ?";
+    const sql = "SELECT * FROM craftprojects WHERE WorkshopID = ? AND Status = 0";
     db.query(sql, [workshopid], (error, results) => {
       if (error) {
         console.error("Error project for WorkshopID:", error);
@@ -330,7 +368,7 @@ class LocalpartnershipRepository {
   searchProject(req, res) {
     const { workshopid, projectid } = req.params;
 
-    const sql = "SELECT * FROM craftprojects WHERE ProjectID = ? AND WorkshopID = ?";
+    const sql = "SELECT * FROM craftprojects WHERE ProjectID = ? AND WorkshopID = ? AND  Status = 0";
     db.query(sql, [projectid, workshopid], (error, results) => {
       if (error) {
         console.error("Error search project:", error);

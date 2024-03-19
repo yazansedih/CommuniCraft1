@@ -15,7 +15,7 @@ class CompaniesRepository {
     const { username, password } = req.body;
     // Find the company by username
     db.query(
-      'SELECT * FROM companies WHERE Username = ?',
+      'SELECT * FROM companies WHERE Username = ? AND Status = 1',
       [username],
       (error, results) => {
         if (error) {
@@ -44,7 +44,7 @@ class CompaniesRepository {
 
             // Update lastLoginDate in the database
             db.query(
-              'UPDATE companies SET LastLoginDate = CURRENT_TIMESTAMP WHERE CompanyID = ?',
+              'UPDATE companies SET LastLoginDate = CURRENT_TIMESTAMP WHERE CompanyID = ? AND Status = 1',
               [company.CompanyID],
               (updateError) => {
                 if (updateError) {
@@ -70,7 +70,7 @@ class CompaniesRepository {
     const { companyId } = req.session;
 
     db.query(
-      'SELECT * FROM companies WHERE CompanyID = ?',
+      'SELECT * FROM companies WHERE CompanyID = ? AND Status = 1',
       [companyId],
       (searchError, results) => {
         if (searchError) {
@@ -95,7 +95,7 @@ class CompaniesRepository {
     const { companyId } = req.session;
 
     db.query(
-        'SELECT * FROM companies WHERE CompanyID = ?',
+        'SELECT * FROM companies WHERE CompanyID = ? AND Status = 1',
         [companyId],
         (error, results) => {
             if (error) {
@@ -118,7 +118,7 @@ class CompaniesRepository {
 
     // Check if the user exists
     db.query(
-      'SELECT * FROM companies WHERE CompanyID = ?',
+      'SELECT * FROM companies WHERE CompanyID = ? AND Status = 1',
       [companyId],
       (error, results) => { 
         if (error) { 
@@ -181,7 +181,7 @@ class CompaniesRepository {
             }
         
             // Construct the parameterized update query
-            const updateQuery = `UPDATE companies SET Password = ? WHERE CompanyID = ?`;
+            const updateQuery = `UPDATE companies SET Password = ? WHERE CompanyID = ? AND Status = 1`;
         
             // Combine the values for the query
             const queryValues = [hashedPassword, companyId];
@@ -198,7 +198,7 @@ class CompaniesRepository {
         } 
         else {
           // Construct the parameterized update query
-          const updateQuery = `UPDATE companies SET ${updateFields.join(', ')} WHERE CompanyID = ?`;
+          const updateQuery = `UPDATE companies SET ${updateFields.join(', ')} WHERE CompanyID = ? AND Status = 1`;
         
           // Combine the values for the query
           const queryValues = [...updateValues, companyId];
@@ -221,7 +221,7 @@ class CompaniesRepository {
     const { companyId } = req.session;
 
     db.query(
-      'SELECT * FROM companies WHERE CompanyID = ?',
+      'SELECT * FROM companies WHERE CompanyID = ? AND Status = 1',
       [companyId],
       (error, results) => {
         if (error) {
@@ -234,7 +234,7 @@ class CompaniesRepository {
 
         // Delete
         db.query(
-          'DELETE FROM companies WHERE CompanyID = ?',
+          'DELETE FROM companies WHERE CompanyID = ? AND Status = 1',
           [companyId],
           (deleteError, deleteResults) => {
               if (deleteError) {
