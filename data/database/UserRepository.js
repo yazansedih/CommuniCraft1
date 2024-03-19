@@ -16,7 +16,7 @@ class UserRepository {
     return new Promise((resolve, reject) => {
       // Check if the user already exists (Checking the email)
       db.query(
-        'SELECT * FROM users WHERE Email = ? OR Username = ? AND Active = 1',
+        'SELECT * FROM users WHERE Email = ? OR Username = ?',
         [username, email],
         (error, results) => {
           if (error) {
@@ -37,8 +37,8 @@ class UserRepository {
 
             // Create a new user with the hashed password and registration date
             db.query(
-              'INSERT INTO users (Username, Password, Email, userType, RegistrationDate) VALUES (?, ?, ?, ?, ?)',
-              [username, hashedPassword, email, usertype, registrationDate],
+              'INSERT INTO users (Username, Password, Email, userType, RegistrationDate, Active) VALUES (?, ?, ?, ?, ?, ?)',
+              [username, hashedPassword, email, usertype, registrationDate, '1'],
               (insertError) => {
                 if (insertError) {
                   console.log(password);
@@ -88,7 +88,7 @@ class UserRepository {
 
             // Update lastLoginDate in the database
             db.query(
-              'UPDATE users SET LastLoginDate = CURRENT_TIMESTAMP WHERE UserID = ?',
+              'UPDATE users SET LastLoginDate = CURRENT_TIMESTAMP WHERE UserID = ? AND Active = 1',
               [user.UserID],
               (updateError) => {
                 if (updateError) {
@@ -214,6 +214,43 @@ class UserRepository {
     });
   }
 
+
+  getSystemReport(callback) {
+    const sqlQuery = `
+      SELECT 
+        COUNT(UserID) AS TotalUsers,
+        SUM(CASE WHEN Active = 1 THEN 1 ELSE 0 END) AS ActiveUsers,
+        SUM(CASE WHEN Active = 0 THEN 1 ELSE 0 END) AS InactiveUsers,
+        SUM(CASE WHEN userType = 'owner' THEN 1 ELSE 0 END) AS TotalOwners,
+        SUM(CASE WHEN userType = 'customer' THEN 1 ELSE 0 END) AS TotalCustomers,
+        SUM(CASE WHEN userType = 'artisan' THEN 1 ELSE 0 END) AS TotalArtisans,
+        COUNT(DISTINCT GroupID) AS TotalGroups
+      FROM 
+        users;
+    `;
+
+    db.query(sqlQuery, (err, results) => {
+      if (err) {
+        console.error('Error fetching system report:', err);
+        return callback(err, null);
+      }
+
+      const systemReport = {
+        totalUsers: results[0].TotalUsers,
+        activeUsers: results[0].ActiveUsers,
+        inactiveUsers: results[0].InactiveUsers,
+        totalOwners: results[0].TotalOwners,
+        totalCustomers: results[0].TotalCustomers,
+        totalArtisans: results[0].TotalArtisans,
+        totalGroups: results[0].TotalGroups
+      };
+
+      callback(null, systemReport);
+    });
+  }
+
+
+
   logoutUser(req, res) {
     const { userId } = req.session;
 
@@ -334,7 +371,7 @@ class UserRepository {
             }
         
             // Construct the parameterized update query
-            const updateQuery = `UPDATE users SET Password = ? WHERE UserID = ?`;
+            const updateQuery = `UPDATE users SET Password = ? WHERE UserID = ? AND Active = 1`;
         
             // Combine the values for the query
             const queryValues = [hashedPassword, userId];
@@ -351,7 +388,7 @@ class UserRepository {
         } 
         else {
           // Construct the parameterized update query
-          const updateQuery = `UPDATE users SET ${updateFields.join(', ')} WHERE UserID = ?`;
+          const updateQuery = `UPDATE users SET ${updateFields.join(', ')} WHERE UserID = ? AND Active = 1`;
         
           // Combine the values for the query
           const queryValues = [...updateValues, userId];
@@ -419,7 +456,7 @@ class UserRepository {
   getUserType(userId) {
     return new Promise((resolve, reject) => {
       db.query(
-        'SELECT userType FROM users WHERE UserID = ?',
+        'SELECT userType FROM users WHERE UserID = ? AND Active = 1',
         [userId],
         (error, results) => {
           if (error) {
@@ -442,7 +479,7 @@ class UserRepository {
     }
 
     db.query(
-      "SELECT * FROM users WHERE UserID = ?",
+      "SELECT * FROM users WHERE UserID = ? AND Active = 1",
       [to],
       (userError, userResults) => {
         if (userError) {
@@ -634,9 +671,6 @@ class UserRepository {
       }
     );
   }
-
-
-
 
 
 }

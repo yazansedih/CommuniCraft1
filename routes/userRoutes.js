@@ -18,6 +18,7 @@ router.patch('/acceptUserPending/:userid', authenticateAdmin, userController.acc
 router.patch('/acceptCompanyPending/:companyid', authenticateAdmin, userController.acceptCompanyPending);
 router.delete('/rejectUserPending/:userid', authenticateAdmin, userController.rejectUserPending);
 router.delete('/rejectCompanyPending/:companyid', authenticateAdmin, userController.rejectCompanyPending);
+router.get('/system-report', authenticateAdmin, userController.getSystemReport);
 
 router
   .route('/profile')
