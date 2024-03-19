@@ -28,6 +28,8 @@ router.get('/searchbookedgroup/:workshopid', authenticateOnwer, localpartnership
 router.patch('/:workshopid/groupemployment/:groupid', authenticateOnwer, localpartnershipController.groupEmployment); 
 router.delete('/layingoffgroup/:workshopid', authenticateOnwer, localpartnershipController.layingOffGroup)
 
+router.get('/:workshopid/pendingprojects', authenticateOnwer, localpartnershipController.pendingProjects); 
+router.get('/:workshopid/acceptproject', authenticateOnwer, localpartnershipController.acceptProject); 
 router.get('/:workshopid/myprojects', authenticateOnwer, localpartnershipController.myProjects); 
 router.get('/:workshopid/searchproject/:projectid', authenticateOnwer, localpartnershipController.searchProject);
 

@@ -1,5 +1,6 @@
 const express = require('express');
 const userController = require('../controllers/userController');
+const { authenticateAdmin } = require('../middlewares/authenticateAdmin');
 const { authenticateNotAdmin } = require('../middlewares/authenticateNotAdmin');
 const { authenticateArtisan } = require('../middlewares/authenticateArtisan');
 const { authenticateUser } = require('../middlewares/authenticateUser');
@@ -11,6 +12,12 @@ const router = express.Router();
 router.post('/signup', authenticateNotAdmin, authController.signup); //api/users/signup
 // router.post('/signup', userController.registerUser); //api/users/signup
 router.post('/login', userController.loginUser);
+
+router.get('/showpending', authenticateAdmin, userController.showPending);
+router.patch('/acceptUserPending/:userid', authenticateAdmin, userController.acceptUserPending);
+router.patch('/acceptCompanyPending/:companyid', authenticateAdmin, userController.acceptCompanyPending);
+router.delete('/rejectUserPending/:userid', authenticateAdmin, userController.rejectUserPending);
+router.delete('/rejectCompanyPending/:companyid', authenticateAdmin, userController.rejectCompanyPending);
 
 router
   .route('/profile')

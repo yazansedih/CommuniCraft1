@@ -23,7 +23,7 @@ const resourcesRouter = require('./routes/resourcesRoutes');
 const finishedprojectRouter = require('./routes/finishedprojectRoutes');  
 const externalAPIs = require('./routes/externalAPIsRoutes');
 
-const {
+const { 
   addUserSocket,
   notifyUser,
   removeUserSocket,

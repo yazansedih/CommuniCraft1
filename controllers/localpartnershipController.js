@@ -43,6 +43,14 @@ exports.addWorkshop = (req, res) => {
     localpartnershipRepository.layingOffGroup(req,res);
   }
 
+  exports.pendingProjects = (req, res) => {
+    localpartnershipRepository.pendingProjects(req,res);
+  }
+
+  exports.acceptProject = (req, res) => {
+    localpartnershipRepository.acceptProject(req,res);
+  }
+
   exports.myProjects = (req, res) => {
     localpartnershipRepository.myProjects(req,res);
   }

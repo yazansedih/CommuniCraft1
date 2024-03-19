@@ -56,7 +56,6 @@ class UserRepository {
   };
   
   loginUser(req, res) {
-    
     const { username, password } = req.body;
     // Find the user by username
     db.query(
@@ -110,6 +109,110 @@ class UserRepository {
       },
     );
   };
+
+  showPending(req, res) {
+    let users = null;
+    let companies = null;
+
+    db.query(
+        'SELECT * FROM users WHERE Active = 0',
+        (error, results) => {
+            if (error) {
+                return res.status(500).json({ message: 'Internal server error.' });
+            }
+
+            if (results.length !== 0) {
+              users = results;
+            }
+        },
+    );
+
+    db.query(
+        'SELECT * FROM companies WHERE Status = 0',
+        (error, results) => {
+            if (error) {
+                return res.status(500).json({ message: 'Internal server error.' });
+            }
+
+            if (results.length !== 0) {
+                companies = results;
+            } 
+            return res.json({ users: users, companies: companies });            
+        },
+    );
+  }
+
+  acceptUserPending(req, res) {
+    const { userid } = req.params;
+
+    const sql = "UPDATE users SET Active = 1 WHERE UserID = ? AND Active = 0";
+    db.query(sql, [userid], 
+    (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: "Internal server error" });
+      }
+
+      if (results === 0) {
+        return res.status(404).json({ message: "User not found or already Active!" });
+      }
+
+      return res.status(200).json({ message: "User activity successfully!" });
+    });
+  }
+
+  acceptCompanyPending(req, res) {
+    const { companyid } = req.params;
+
+    const sql = "UPDATE companies SET Status = 1 WHERE CompanyID = ? AND Status = 0";
+    db.query(sql, [companyid],
+    (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: "Internal server error" });
+      }
+
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ message: "Company not found or already Active!" });
+      }
+
+      return res.status(200).json({ message: "Company activity successfully!" });
+    });
+  }
+
+  rejectUserPending(req, res) {
+    const { userid } = req.params;
+
+    const sql = "DELETE FROM users WHERE UserID = ? AND Active = 0";
+    db.query(sql, [userid], (
+      error, results) => { 
+        if (error) {
+            return res.status(500).json({ error: "Internal server error" });
+        }
+
+        if (results === 0) {
+            return res.status(404).json({ message: "User not found!" });
+        }
+
+        return res.status(200).json({ message: "Reject User successfully!" });
+    });
+  }
+
+  rejectCompanyPending(req, res) {
+    const { companyid } = req.params;
+
+    const sql = "DELETE FROM companies WHERE CompanyID = ? AND Status = 0";
+    db.query(sql, [companyid],
+    (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: "Internal server error" });
+      }
+
+      if (results === 0) {
+        return res.status(404).json({ message: "Company not found!" });
+      }
+
+      return res.status(200).json({ message: "Reject Company successfully!" });
+    });
+  }
 
   logoutUser(req, res) {
     const { userId } = req.session;
