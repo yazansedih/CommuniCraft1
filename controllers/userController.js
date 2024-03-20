@@ -26,6 +26,36 @@ exports.loginUser = async (req, res) => {
   }
 };
 
+exports.showPending = (req, res) => {
+  userRepository.showPending(req, res);
+}
+
+exports.acceptUserPending = (req, res) => {
+  userRepository.acceptUserPending(req, res);
+}
+
+exports.acceptCompanyPending = (req, res) => {
+  userRepository.acceptCompanyPending(req, res);
+}
+
+exports.rejectUserPending = (req, res) => {
+  userRepository.rejectUserPending(req, res);
+}
+
+exports.rejectCompanyPending = (req, res) => {
+  userRepository.rejectCompanyPending(req, res);
+}
+
+exports.getSystemReport = (req, res) => {
+  userRepository.getSystemReport((err, systemReport) => {
+    if (err) {
+      console.error('Error fetching system report:', err);
+      return res.status(500).json({ error: 'Error fetching system report' });
+    }
+    res.json(systemReport);
+  });
+};
+
 exports.logoutUser = (req, res) => {
   userRepository.logoutUser(req, res);
 };

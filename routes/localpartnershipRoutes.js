@@ -10,6 +10,7 @@ const router = express.Router();
 // Routes for user registration and authentication
 router.post('/addworkshop', authenticateOnwer, localpartnershipController.addWorkshop); 
 
+router.get('/myWorkshops', authenticateOnwer, localpartnershipController.myWorkshops)
 router.get('/workshopProfile/:id', authenticateOnwer, localpartnershipController.getWorkshopProfile)
 
 router
@@ -27,7 +28,16 @@ router.get('/searchbookedgroup/:workshopid', authenticateOnwer, localpartnership
 router.patch('/:workshopid/groupemployment/:groupid', authenticateOnwer, localpartnershipController.groupEmployment); 
 router.delete('/layingoffgroup/:workshopid', authenticateOnwer, localpartnershipController.layingOffGroup)
 
+router.get('/:workshopid/pendingprojects', authenticateOnwer, localpartnershipController.pendingProjects); 
+router.get('/:workshopid/acceptproject', authenticateOnwer, localpartnershipController.acceptProject); 
 router.get('/:workshopid/myprojects', authenticateOnwer, localpartnershipController.myProjects); 
 router.get('/:workshopid/searchproject/:projectid', authenticateOnwer, localpartnershipController.searchProject);
+
+router.post('/communication/sendMessage/:workshopid', authenticateOnwer, localpartnershipController.sendMessage);
+router.get('/communication/receivedMessages/:workshopid', authenticateOnwer, localpartnershipController.receivedMessages);
+router.get('/communication/sentMessages/:workshopid', authenticateOnwer, localpartnershipController.sentMessages);
+router.delete('/:workshopid/communication/deleteMessage/:messageid', authenticateOnwer, localpartnershipController.deleteMessage);
+router.delete('/communication/deleteMessageHistory/:workshopid', authenticateOnwer, localpartnershipController.deleteMessageHistory);
+
 
 module.exports = router;

@@ -16,7 +16,7 @@ class UserRepository {
     return new Promise((resolve, reject) => {
       // Check if the user already exists (Checking the email)
       db.query(
-        'SELECT * FROM users WHERE Email = ? OR Username = ? AND Active = 1',
+        'SELECT * FROM users WHERE Email = ? OR Username = ?',
         [username, email],
         (error, results) => {
           if (error) {
@@ -37,8 +37,8 @@ class UserRepository {
 
             // Create a new user with the hashed password and registration date
             db.query(
-              'INSERT INTO users (Username, Password, Email, userType, RegistrationDate) VALUES (?, ?, ?, ?, ?)',
-              [username, hashedPassword, email, usertype, registrationDate],
+              'INSERT INTO users (Username, Password, Email, userType, RegistrationDate, Active) VALUES (?, ?, ?, ?, ?, ?)',
+              [username, hashedPassword, email, usertype, registrationDate, '1'],
               (insertError) => {
                 if (insertError) {
                   console.log(password);
@@ -56,7 +56,6 @@ class UserRepository {
   };
   
   loginUser(req, res) {
-    
     const { username, password } = req.body;
     // Find the user by username
     db.query(
@@ -89,7 +88,7 @@ class UserRepository {
 
             // Update lastLoginDate in the database
             db.query(
-              'UPDATE users SET LastLoginDate = CURRENT_TIMESTAMP WHERE UserID = ?',
+              'UPDATE users SET LastLoginDate = CURRENT_TIMESTAMP WHERE UserID = ? AND Active = 1',
               [user.UserID],
               (updateError) => {
                 if (updateError) {
@@ -110,6 +109,147 @@ class UserRepository {
       },
     );
   };
+
+  showPending(req, res) {
+    let users = null;
+    let companies = null;
+
+    db.query(
+        'SELECT * FROM users WHERE Active = 0',
+        (error, results) => {
+            if (error) {
+                return res.status(500).json({ message: 'Internal server error.' });
+            }
+
+            if (results.length !== 0) {
+              users = results;
+            }
+        },
+    );
+
+    db.query(
+        'SELECT * FROM companies WHERE Status = 0',
+        (error, results) => {
+            if (error) {
+                return res.status(500).json({ message: 'Internal server error.' });
+            }
+
+            if (results.length !== 0) {
+                companies = results;
+            } 
+            return res.json({ users: users, companies: companies });            
+        },
+    );
+  }
+
+  acceptUserPending(req, res) {
+    const { userid } = req.params;
+
+    const sql = "UPDATE users SET Active = 1 WHERE UserID = ? AND Active = 0";
+    db.query(sql, [userid], 
+    (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: "Internal server error" });
+      }
+
+      if (results === 0) {
+        return res.status(404).json({ message: "User not found or already Active!" });
+      }
+
+      return res.status(200).json({ message: "User activity successfully!" });
+    });
+  }
+
+  acceptCompanyPending(req, res) {
+    const { companyid } = req.params;
+
+    const sql = "UPDATE companies SET Status = 1 WHERE CompanyID = ? AND Status = 0";
+    db.query(sql, [companyid],
+    (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: "Internal server error" });
+      }
+
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ message: "Company not found or already Active!" });
+      }
+
+      return res.status(200).json({ message: "Company activity successfully!" });
+    });
+  }
+
+  rejectUserPending(req, res) {
+    const { userid } = req.params;
+
+    const sql = "DELETE FROM users WHERE UserID = ? AND Active = 0";
+    db.query(sql, [userid], (
+      error, results) => { 
+        if (error) {
+            return res.status(500).json({ error: "Internal server error" });
+        }
+
+        if (results === 0) {
+            return res.status(404).json({ message: "User not found!" });
+        }
+
+        return res.status(200).json({ message: "Reject User successfully!" });
+    });
+  }
+
+  rejectCompanyPending(req, res) {
+    const { companyid } = req.params;
+
+    const sql = "DELETE FROM companies WHERE CompanyID = ? AND Status = 0";
+    db.query(sql, [companyid],
+    (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: "Internal server error" });
+      }
+
+      if (results === 0) {
+        return res.status(404).json({ message: "Company not found!" });
+      }
+
+      return res.status(200).json({ message: "Reject Company successfully!" });
+    });
+  }
+
+
+  getSystemReport(callback) {
+    const sqlQuery = `
+      SELECT 
+        COUNT(UserID) AS TotalUsers,
+        SUM(CASE WHEN Active = 1 THEN 1 ELSE 0 END) AS ActiveUsers,
+        SUM(CASE WHEN Active = 0 THEN 1 ELSE 0 END) AS InactiveUsers,
+        SUM(CASE WHEN userType = 'owner' THEN 1 ELSE 0 END) AS TotalOwners,
+        SUM(CASE WHEN userType = 'customer' THEN 1 ELSE 0 END) AS TotalCustomers,
+        SUM(CASE WHEN userType = 'artisan' THEN 1 ELSE 0 END) AS TotalArtisans,
+        COUNT(DISTINCT GroupID) AS TotalGroups
+      FROM 
+        users;
+    `;
+
+    db.query(sqlQuery, (err, results) => {
+      if (err) {
+        console.error('Error fetching system report:', err);
+        return callback(err, null);
+      }
+
+      const systemReport = {
+        totalUsers: results[0].TotalUsers,
+        activeUsers: results[0].ActiveUsers,
+        inactiveUsers: results[0].InactiveUsers,
+        totalOwners: results[0].TotalOwners,
+        totalCustomers: results[0].TotalCustomers,
+        totalArtisans: results[0].TotalArtisans,
+        totalGroups: results[0].TotalGroups
+      };
+
+      callback(null, systemReport);
+    });
+  }
+
+
 
   logoutUser(req, res) {
     const { userId } = req.session;
@@ -231,7 +371,7 @@ class UserRepository {
             }
         
             // Construct the parameterized update query
-            const updateQuery = `UPDATE users SET Password = ? WHERE UserID = ?`;
+            const updateQuery = `UPDATE users SET Password = ? WHERE UserID = ? AND Active = 1`;
         
             // Combine the values for the query
             const queryValues = [hashedPassword, userId];
@@ -248,7 +388,7 @@ class UserRepository {
         } 
         else {
           // Construct the parameterized update query
-          const updateQuery = `UPDATE users SET ${updateFields.join(', ')} WHERE UserID = ?`;
+          const updateQuery = `UPDATE users SET ${updateFields.join(', ')} WHERE UserID = ? AND Active = 1`;
         
           // Combine the values for the query
           const queryValues = [...updateValues, userId];
@@ -316,7 +456,7 @@ class UserRepository {
   getUserType(userId) {
     return new Promise((resolve, reject) => {
       db.query(
-        'SELECT userType FROM users WHERE UserID = ?',
+        'SELECT userType FROM users WHERE UserID = ? AND Active = 1',
         [userId],
         (error, results) => {
           if (error) {
@@ -339,7 +479,7 @@ class UserRepository {
     }
 
     db.query(
-      "SELECT * FROM users WHERE UserID = ?",
+      "SELECT * FROM users WHERE UserID = ? AND Active = 1",
       [to],
       (userError, userResults) => {
         if (userError) {
@@ -380,7 +520,7 @@ class UserRepository {
       return res.status(400).json({ message: "Invalid message data." });
     }
     db.query(
-      "SELECT GroupID FROM users WHERE UserID = ?", //GroupID
+      "SELECT GroupID FROM users WHERE UserID = ? AND userType = 'artisan'", //GroupID
       [userId],
       (Error, ress) => {
         if (Error) {
@@ -435,7 +575,7 @@ class UserRepository {
     const { userId } = req.session;
 
     db.query(
-      "SELECT GroupID FROM users WHERE UserID = ?",
+      "SELECT GroupID FROM users WHERE UserID = ? AND userType = 'artisan'",
       [userId],
       (Error, ress) => {
         if (Error) {
@@ -475,7 +615,6 @@ class UserRepository {
       [userId],
       (insertError, results) => {
         if (insertError) {
-          console.log("1111111", results);
           return res.status(400).json({ message: "Communication not found!😢" });
         }
         
@@ -521,7 +660,7 @@ class UserRepository {
     const { userId } = req.session;
 
     db.query(
-      "DELETE FROM communication WHERE SenderID = ? OR ReceiverID = ? AND (SenderType = 'user' OR ReceiverType = 'user')",
+      "DELETE FROM communication WHERE (SenderID = ? OR ReceiverID = ?) AND (SenderType = 'user' OR ReceiverType = 'user')",
       [userId, userId],
       (insertError, results) => {
         if (insertError) {
@@ -532,9 +671,6 @@ class UserRepository {
       }
     );
   }
-
-
-
 
 
 }

@@ -15,7 +15,7 @@ class CompaniesRepository {
     const { username, password } = req.body;
     // Find the company by username
     db.query(
-      'SELECT * FROM companies WHERE Username = ?',
+      'SELECT * FROM companies WHERE Username = ? AND Status = 1',
       [username],
       (error, results) => {
         if (error) {
@@ -44,7 +44,7 @@ class CompaniesRepository {
 
             // Update lastLoginDate in the database
             db.query(
-              'UPDATE companies SET LastLoginDate = CURRENT_TIMESTAMP WHERE CompanyID = ?',
+              'UPDATE companies SET LastLoginDate = CURRENT_TIMESTAMP WHERE CompanyID = ? AND Status = 1',
               [company.CompanyID],
               (updateError) => {
                 if (updateError) {
@@ -70,7 +70,7 @@ class CompaniesRepository {
     const { companyId } = req.session;
 
     db.query(
-      'SELECT * FROM companies WHERE CompanyID = ?',
+      'SELECT * FROM companies WHERE CompanyID = ? AND Status = 1',
       [companyId],
       (searchError, results) => {
         if (searchError) {
@@ -95,7 +95,7 @@ class CompaniesRepository {
     const { companyId } = req.session;
 
     db.query(
-        'SELECT * FROM companies WHERE CompanyID = ?',
+        'SELECT * FROM companies WHERE CompanyID = ? AND Status = 1',
         [companyId],
         (error, results) => {
             if (error) {
@@ -118,7 +118,7 @@ class CompaniesRepository {
 
     // Check if the user exists
     db.query(
-      'SELECT * FROM companies WHERE CompanyID = ?',
+      'SELECT * FROM companies WHERE CompanyID = ? AND Status = 1',
       [companyId],
       (error, results) => { 
         if (error) { 
@@ -181,7 +181,7 @@ class CompaniesRepository {
             }
         
             // Construct the parameterized update query
-            const updateQuery = `UPDATE companies SET Password = ? WHERE CompanyID = ?`;
+            const updateQuery = `UPDATE companies SET Password = ? WHERE CompanyID = ? AND Status = 1`;
         
             // Combine the values for the query
             const queryValues = [hashedPassword, companyId];
@@ -198,7 +198,7 @@ class CompaniesRepository {
         } 
         else {
           // Construct the parameterized update query
-          const updateQuery = `UPDATE companies SET ${updateFields.join(', ')} WHERE CompanyID = ?`;
+          const updateQuery = `UPDATE companies SET ${updateFields.join(', ')} WHERE CompanyID = ? AND Status = 1`;
         
           // Combine the values for the query
           const queryValues = [...updateValues, companyId];
@@ -221,7 +221,7 @@ class CompaniesRepository {
     const { companyId } = req.session;
 
     db.query(
-      'SELECT * FROM companies WHERE CompanyID = ?',
+      'SELECT * FROM companies WHERE CompanyID = ? AND Status = 1',
       [companyId],
       (error, results) => {
         if (error) {
@@ -234,7 +234,7 @@ class CompaniesRepository {
 
         // Delete
         db.query(
-          'DELETE FROM companies WHERE CompanyID = ?',
+          'DELETE FROM companies WHERE CompanyID = ? AND Status = 1',
           [companyId],
           (deleteError, deleteResults) => {
               if (deleteError) {
@@ -379,6 +379,118 @@ class CompaniesRepository {
       });
   }
 
+  sendMessage(req,res) {
+    const { companyId } = req.session;
+    const { to, message } = req.body;  // to : workshopid
+
+    if (!(to && message)) {
+      return res.status(400).json({ message: "Invalid message data." });
+    }
+
+    // console.log("comanyID:", companyId, " workshopid:", to);
+    db.query(
+      "SELECT * FROM collaboration WHERE CompanyID = ? AND WorkshopID = ?",
+      [companyId, to],
+      (userError, userResults) => {
+        if (userError) {
+          console.error("Error:", userError);
+          return res.status(500).json({ message: "Internal server error." });
+        }
+
+        if (userResults.length === 0) {
+          return res
+            .status(404)
+            .json({
+              message: "Collaboration does not exist!😢",
+            });
+        }
+
+        const registrationDate = new Date();
+        db.query(
+          "INSERT INTO communication (SenderID, ReceiverID, Message, SenderType, ReceiverType, Timestamp) VALUES (?, ?, ?, ?, ?, ?)",
+          [companyId, to, message, 'company', 'workshop', registrationDate],
+          (insertError) => {
+            if (insertError) {
+              return res.status(400).json({ message: "Communication failed😢!" });
+            }
+
+            return res.status(200).json({ message: "Communication successfully😊." });
+          }
+        );
+      }
+    );
+  }
+
+  receivedMessages(req,res) {
+    const { companyId } = req.session;
+
+    db.query(
+      "SELECT * FROM communication WHERE ReceiverID = ? AND ReceiverType = ?",
+      [companyId, 'company'],
+      (insertError, resss) => {
+        if (insertError) {
+          console.log("Error:", insertError);
+          return res.status(400).json({ message: "Communication failed😢!" });
+        }
+
+        return res.status(200).json({ receivedMessages: resss });
+      }
+    ); 
+    
+  }
+
+  sentMessages(req,res) {
+    const { companyId } = req.session;
+
+    db.query(
+      "SELECT * FROM communication WHERE SenderID = ? AND SenderType = ?",
+      [companyId, 'company'],
+      (insertError, resss) => {
+        if (insertError) {
+          console.log("Error:", insertError);
+          return res.status(400).json({ message: "Communication failed😢!" });
+        }
+
+        return res.status(200).json({ sentMessages: resss });
+      }
+    ); 
+    
+  }
+
+  deleteMessage(req,res) {
+    const { companyId } = req.session;
+    const { messageid } = req.params;
+
+    db.query(
+      "DELETE FROM communication WHERE MessageID = ? AND (SenderID = ? OR ReceiverID = ?) AND (SenderType = 'company' OR ReceiverType = 'company')",
+      [messageid, companyId, companyId],
+      (insertError, results) => {
+        if (insertError) {
+          return res.status(400).json({ message: "Communication not found!😢" });
+        }
+        
+        return res.json({ message: 'Delete message successfully.😊' });
+      }
+    ); 
+    
+  }
+
+  deleteMessageHistory(req,res) {
+    const { companyId } = req.session;
+
+    db.query(
+      "DELETE FROM communication WHERE (SenderID = ? OR ReceiverID = ?) AND (SenderType = 'company' OR ReceiverType = 'company')",
+      [companyId, companyId],
+      (insertError, results) => {
+        if (insertError) {
+          return res.status(400).json({ message: "Communication not found!😢" });
+        }
+        
+        return res.json({ message: 'Delete message successfully.😊' });
+      }
+    );    
+    
+  }
 }
 
 module.exports = CompaniesRepository;

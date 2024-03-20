@@ -42,7 +42,7 @@ exports.signup = catchAsync(async (req, res, next) => {
 
     try {
       await sequelize.query(
-        'INSERT INTO companies (Username, Password, Email, CompanyName, Specialty, Location, Employees, Description, RegistrationDate, LastLoginDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        'INSERT INTO companies (Username, Password, Email, CompanyName, Specialty, Location, Employees, Description, RegistrationDate, LastLoginDate, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         {
           replacements: [
             newCompany.Username,            
@@ -54,7 +54,8 @@ exports.signup = catchAsync(async (req, res, next) => {
             null,            
             null,   
             date,
-            null,                 
+            null,       
+            '0',
           ],
         },
       );
