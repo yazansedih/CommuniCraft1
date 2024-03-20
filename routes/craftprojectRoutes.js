@@ -13,7 +13,13 @@ const router = express.Router();
 
 
 
+
 router.post('/addproject', authenticateCustomer, craftprojectController.addproject);
+
+
+
+router.get('/workshop', authenticateCustomer, craftprojectController.workshop);
+
 router.put('/updateproject/:id',  authenticateCustomer, craftprojectController.updateproject);
 router.delete('/deleteproject/:id',  authenticateCustomer, craftprojectController.deleteproject);
 

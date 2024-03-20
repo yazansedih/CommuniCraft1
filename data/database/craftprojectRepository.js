@@ -372,8 +372,30 @@ db.query(sql, [customerID, Title, Description, JSON.stringify(materials), Status
 //         res.status(200).json({ title });
 //     });
 // }
+workshop(req, res) {
+    
+    const sql = `
+    SELECT lp.WorkshopID, lp.WorkshopName, lp.Location, lp.Description, lp.ContactInfo, u.Username
+    FROM localpartnerships lp
+    INNER JOIN users u ON lp.OwnerID = u.UserID;
+  `;
 
+
+db.query(sql, (error, results) => {
+  if (error) {
+      console.error('Error fetching workshops :', error);
+      return res.status(500).json({ error: 'Internal server error' });
+  }
+
+  res.status(200).json({  workshops: results });
+  
+});
 
 }
+
+}
+
+
+
 
 module.exports = CraftprojectRepository;
