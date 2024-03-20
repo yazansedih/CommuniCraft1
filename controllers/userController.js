@@ -43,64 +43,31 @@ exports.deleteAccount = (req, res) => {
 };
 
 
-// exports.searchUser = (req, res) => {
-//   userRepository.searchUser(req, res);
-// };
+exports.sendMessageToUser = (req, res) => {
+  userRepository.sendMessageToUser(req, res);
+}
 
+exports.sendMessageToGroup = (req, res) => {
+  userRepository.sendMessageToGroup(req, res);
+}
 
+exports.receivedGroupMessages = (req, res)  =>{
+  userRepository.receivedGroupMessages(req, res);
+}
 
+exports.receivedMessages = (req, res) => {
+  userRepository.receivedMessages(req, res);
+}
 
-// exports.getSameUsers = (req, res) => {
-//   userRepository.getSameUsers(req, res);
-// };
+exports.sentMessages = (req, res) => {
+  userRepository.sentMessages(req,res);
+}
 
-// exports.getReceivedMessages = (req, res) => {
-//   userRepository.getReceivedMessages(req, res);
-// };
+exports.deleteMessage = (req, res) => {
+  userRepository.deleteMessage(req,res);
+}
 
-// exports.getSentMessages = (req, res) => {
-//   userRepository.getSentMessages(req, res);
-// };
+exports.deleteMessageHistory = (req, res) => {
+  userRepository.deleteMessageHistory(req,res);
+}
 
-// exports.sendMessage = (req, res) => {
-//   userRepository.sendMessage(req, res);
-// };
-
-// exports.getUsersContributions = (req, res) => {
-//   userRepository.getUsersContributions(req, res);
-// };
-
-// exports.createContribution = (req, res) => {
-//   userRepository.createContribution(req, res);
-// };
-
-// exports.addInterests = async (req, res) => {
-//   try {
-//     const interests = req.body;
-//     const userId = req.session.userId;
-
-//     await userRepository.addInterests(userId, interests);
-
-//     // Send a success response
-//     res.status(201).json({ message: 'Interests added successfully.' });
-//   } catch (error) {
-//     // Handle errors and send an appropriate response
-//     console.error('Error adding interests:', error);
-//     res.status(500).json({ message: 'Internal server error.' });
-//   }
-// };
-
-// exports.getInterests = async (req, res) => {
-//   const userId = req.session.userId;
-
-//   try {
-//     // Fetch user interests from the repository
-//     const interests = await userRepository.getUserInterests(userId);
-
-//     // Return the interests as a JSON response
-//     res.json({ interests });
-//   } catch (error) {
-//     console.error('Error fetching user interests:', error);
-//     res.status(500).json({ message: 'Internal server error.' });
-//   }
-// };

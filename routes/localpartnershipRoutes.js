@@ -23,7 +23,11 @@ router.delete('/deleteworkshop/:id', authenticateOnwer, localpartnershipControll
 
 router.get('/searchallgroups', authenticateOnwer, localpartnershipController.searchAllGroups); 
 router.get('/searchgroup/:id', authenticateOnwer, localpartnershipController.searchGroup); 
+router.get('/searchbookedgroup/:workshopid', authenticateOnwer, localpartnershipController.searchBookedGroup);
 router.patch('/:workshopid/groupemployment/:groupid', authenticateOnwer, localpartnershipController.groupEmployment); 
-router.patch('/layingoffgroup/:workshopid', authenticateOnwer, localpartnershipController.layingOffGroup)
+router.delete('/layingoffgroup/:workshopid', authenticateOnwer, localpartnershipController.layingOffGroup)
+
+router.get('/:workshopid/myprojects', authenticateOnwer, localpartnershipController.myProjects); 
+router.get('/:workshopid/searchproject/:projectid', authenticateOnwer, localpartnershipController.searchProject);
 
 module.exports = router;

@@ -103,6 +103,7 @@ class UserRepository {
             );
 
             req.session.userId = user.UserID; // Store the user's ID in the session
+            req.session.type = user.userType; 
             return res.status(200).json({ message: 'User login successfully.' });
           },
         );
@@ -311,9 +312,8 @@ class UserRepository {
     );
   }  
 
-
-   // for middlewares
-   getUserType(userId) {
+  // for middlewares
+  getUserType(userId) {
     return new Promise((resolve, reject) => {
       db.query(
         'SELECT userType FROM users WHERE UserID = ?',
@@ -329,6 +329,213 @@ class UserRepository {
       );
     });
   }
+
+  sendMessageToUser(req, res) {
+    const { userId, type } = req.session;
+    const { to, message } = req.body;
+
+    if (!(to && message)) {
+      return res.status(400).json({ message: "Invalid message data." });
+    }
+
+    db.query(
+      "SELECT * FROM users WHERE UserID = ?",
+      [to],
+      (userError, userResults) => {
+        if (userError) {
+          console.error("Error:", userError);
+          return res.status(500).json({ message: "Internal server error." });
+        }
+
+        if (userResults.length === 0) {
+          return res
+            .status(404)
+            .json({
+              message: "The user you are sending to does not exist!😢",
+            });
+        }
+
+        const registrationDate = new Date();
+        db.query(
+          "INSERT INTO communication (SenderID, ReceiverID, Message, SenderType, ReceiverType, Timestamp) VALUES (?, ?, ?, ?, ?, ?)",
+          [userId, to, message, 'user', 'user', registrationDate],
+          (insertError) => {
+            if (insertError) {
+              return res.status(400).json({ message: "Communication failed😢!" });
+            }
+
+            return res.status(200).json({ message: "Communication successfully😊." });
+          }
+        );
+      }
+    );
+
+  }
+
+  sendMessageToGroup(req, res) {
+    const { userId } = req.session;
+    const { message } = req.body;
+
+    if (!(message)) {
+      return res.status(400).json({ message: "Invalid message data." });
+    }
+    db.query(
+      "SELECT GroupID FROM users WHERE UserID = ?", //GroupID
+      [userId],
+      (Error, ress) => {
+        if (Error) {
+          console.error("Error:", Error);
+          return res.status(500).json({ message: "Internal server error." });
+        }
+
+        if (ress.length === 0) {
+          return res
+            .status(404)
+            .json({
+              message: "You are not in a group!😢",
+            });
+        }
+                
+        db.query(
+          "SELECT * FROM `group` WHERE GroupID = ?",
+          [ress[0].GroupID],
+          (Error, Results) => {
+            if (Error) {
+              console.error("Error:", Error);
+              return res.status(500).json({ message: "Internal server error." });
+            }
+    
+            if (Results.length === 0) {
+              return res
+                .status(404)
+                .json({
+                  message: "You are not in a group!😢",
+                });
+            }
+    
+            const registrationDate = new Date();
+            db.query(
+              "INSERT INTO communication (SenderID, ReceiverID, Message, SenderType, ReceiverType, Timestamp) VALUES (?, ?, ?, ?, ?, ?)",
+              [userId, ress[0].GroupID, message, 'user', 'group', registrationDate],
+              (insertError) => {
+                if (insertError) {
+                  return res.status(400).json({ message: "Communication failed😢!" });
+                }
+    
+                return res.status(200).json({ message: "Communication successfully😊." });
+              }
+            );
+          }
+        );
+      }
+    );
+  }
+
+  receivedGroupMessages(req, res) {
+    const { userId } = req.session;
+
+    db.query(
+      "SELECT GroupID FROM users WHERE UserID = ?",
+      [userId],
+      (Error, ress) => {
+        if (Error) {
+          console.error("Error:", Error);
+          return res.status(500).json({ message: "Internal server error." });
+        }
+
+        if (ress.length === 0) {
+          return res
+            .status(404)
+            .json({
+              message: "You are not in a group!😢",
+            });
+        }
+
+        db.query(
+          "SELECT * FROM communication WHERE ReceiverID = ? AND (ReceiverType = 'group')",
+          [ress[0].GroupID],
+          (insertError, results) => {
+            if (insertError) {
+              return res.status(400).json({ message: "Communication not found!😢" });
+            }
+            
+            return res.status(200).json({ receivedGroupMessages: results });
+          }
+        );
+
+      }
+    );    
+  }
+
+  receivedMessages(req, res) {
+    const { userId } = req.session;
+
+    db.query(
+      "SELECT * FROM communication WHERE ReceiverID = ? AND (ReceiverType = 'user')",
+      [userId],
+      (insertError, results) => {
+        if (insertError) {
+          console.log("1111111", results);
+          return res.status(400).json({ message: "Communication not found!😢" });
+        }
+        
+        return res.status(200).json({ receivedMessages: results });
+      }
+    );
+  }
+
+  sentMessages(req, res) {
+    const { userId } = req.session;
+
+    db.query(
+      "SELECT * FROM communication WHERE SenderID = ? AND SenderType = 'user'",
+      [userId],
+      (insertError, results) => {
+        if (insertError) {
+          return res.status(400).json({ message: "Communication not found!😢" });
+        }
+        
+        return res.status(200).json({ sentMessages: results });
+      }
+    );
+  }
+
+  deleteMessage(req, res) {
+    const { userId } = req.session;
+    const { messageid } = req.params;
+
+    db.query(
+      "DELETE FROM communication WHERE MessageID = ? AND (SenderType = 'user' OR ReceiverType = 'user')",
+      [messageid],
+      (insertError, results) => {
+        if (insertError) {
+          return res.status(400).json({ message: "Communication not found!😢" });
+        }
+        
+        return res.json({ message: 'Delete message successfully.😊' });
+      }
+    );
+  }
+
+  deleteMessageHistory(req, res) {
+    const { userId } = req.session;
+
+    db.query(
+      "DELETE FROM communication WHERE SenderID = ? OR ReceiverID = ? AND (SenderType = 'user' OR ReceiverType = 'user')",
+      [userId, userId],
+      (insertError, results) => {
+        if (insertError) {
+          return res.status(400).json({ message: "Communication not found!😢" });
+        }
+        
+        return res.json({ message: 'Delete message history successfully.😊' });
+      }
+    );
+  }
+
+
+
+
 
 }
   module.exports = UserRepository;
