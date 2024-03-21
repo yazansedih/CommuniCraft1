@@ -38,7 +38,7 @@ app.use('/api/localpartnerships', localpartnershipRouter);
 app.use('/api/craftprojects', craftprojectRouter);
 app.use('/api/resources', resourcesRouter);
 app.use('/api/finishedprojects', finishedprojectRouter);
-app.use('/api/external-api', externalAPIs);
+app.use('/api/externalapi', externalAPIs);
 
 io.on('connection', (socket) => {
   console.log('A user connected');
