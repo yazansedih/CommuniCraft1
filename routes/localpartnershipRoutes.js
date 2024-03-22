@@ -29,9 +29,12 @@ router.patch('/:workshopid/groupemployment/:groupid', authenticateOnwer, localpa
 router.delete('/layingoffgroup/:workshopid', authenticateOnwer, localpartnershipController.layingOffGroup)
 
 router.get('/:workshopid/pendingprojects', authenticateOnwer, localpartnershipController.pendingProjects); 
-router.get('/:workshopid/acceptproject', authenticateOnwer, localpartnershipController.acceptProject); 
+router.post('/:workshopid/acceptproject', authenticateOnwer, localpartnershipController.acceptProject); 
 router.get('/:workshopid/myprojects', authenticateOnwer, localpartnershipController.myProjects); 
 router.get('/:workshopid/searchproject/:projectid', authenticateOnwer, localpartnershipController.searchProject);
+router.patch('/:workshopid/workshopProfile/cost/:projectid', authenticateOnwer, localpartnershipController.updateCost);
+router.delete('/:workshopid/layingoffproject/:projectid', authenticateOnwer, localpartnershipController.layingOffProject);
+router.patch('/:workshopid/finishproject/:projectid', authenticateOnwer, localpartnershipController.finishProject);
 
 router.post('/communication/sendMessage/:workshopid', authenticateOnwer, localpartnershipController.sendMessage);
 router.get('/communication/receivedMessages/:workshopid', authenticateOnwer, localpartnershipController.receivedMessages);

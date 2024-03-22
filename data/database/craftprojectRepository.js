@@ -16,7 +16,7 @@ class CraftprojectRepository {
     addproj(req, res) {
        
 
-        const { Title, Description, materials, Status, workshopID } = req.body;
+        const { Title, Description, materials, workshopID } = req.body;
         const customerID = req.session.userId;
     
         // Validate required fields
@@ -43,13 +43,13 @@ class CraftprojectRepository {
     
             // If workshop exists, proceed to insert the project
             const sql = 'INSERT INTO craftprojects (CustomerID, Title, Description, materials, Status, WorkshopID) VALUES (?, ?, ?, ?, ?, ?)';
-db.query(sql, [customerID, Title, Description, JSON.stringify(materials), Status, workshopID], (error, results) => {
-    if (error) {
-        console.error('Error inserting project:', error);
-        return res.status(500).json({ error: 'Internal server error' });
-    }
-    res.status(201).json({ message: 'Project added successfully', projectId: results.insertId });
-});
+            db.query(sql, [customerID, Title, Description, JSON.stringify(materials), null, workshopID], (error, results) => {
+                if (error) {
+                    console.error('Error inserting project:', error);
+                    return res.status(500).json({ error: 'Internal server error' });
+                }
+                res.status(201).json({ message: 'Project added successfully', projectId: results.insertId });
+            });
 
         });
     }
