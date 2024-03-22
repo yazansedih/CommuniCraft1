@@ -59,6 +59,18 @@ exports.addWorkshop = (req, res) => {
     localpartnershipRepository.searchProject(req,res);
   }
 
+  exports.updateCost = (req, res) => {
+    localpartnershipRepository.updateCost(req,res);
+  }
+
+  exports.layingOffProject = (req, res) => {
+    localpartnershipRepository.layingOffProject(req,res);
+  }
+
+  exports.finishProject = (req, res) => {
+    localpartnershipRepository.finishProject(req, res);
+  }
+
   exports.sendMessage = (req, res) => {
     localpartnershipRepository.sendMessage(req,res);
   }

@@ -311,20 +311,19 @@ class LocalpartnershipRepository {
 
   pendingProjects(req, res) {
     const { workshopid } = req.params;
-    const { projectid, cost } = req.body;
-
-    const sql = "SELECT * FROM craftprojects WHERE WorkshopID = ? AND ProjectID = ? AND Status IS NULL";
-    db.query(sql, [workshopid, projectid], (error, results) => {
+    console.log(workshopid);
+    const sql = "SELECT * FROM craftprojects WHERE WorkshopID = ? AND Status IS NULL";
+    db.query(sql, [workshopid], (error, results) => {
       if (error) {
         console.error("Error project for WorkshopID:", error);
         return res.status(500).json({ error: "Internal server error" });
       }
 
       if (results.length === 0) {
-        return res.status(404).json({ message: "project not found!😢" });
+        return res.status(404).json({ message: "This workshop havn't project pending!😢" });
       }
 
-      return res.status(200).json({ projects: results });
+      return res.status(200).json({ pendingProjects: results });
     });
   }
 
@@ -382,6 +381,63 @@ class LocalpartnershipRepository {
       return res.status(200).json({ project: results[0] });
     });
 
+  }
+
+  updateCost(req, res) {
+    const { workshopid, projectid } = req.params;
+    const { cost } = req.body;
+
+    const sql = "UPDATE craftprojects SET Cost = ?  WHERE WorkshopID = ? AND ProjectID = ? AND Status = 0";
+    db.query(sql, [cost, workshopid, projectid], (error, results) => {
+      if (error) {
+        console.error("Error update project for WorkshopID:", error);
+        return res.status(500).json({ error: "Internal server error" });
+      }
+
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ message: "Project not found!😢" });
+      }
+
+      return res.status(200).json({ message: "Update Project successfully!" });
+    });
+
+  }
+
+  layingOffProject(req, res) {
+    const { workshopid, projectid } = req.params;
+
+    const sql = "UPDATE craftprojects SET WorkshopID = ?, Cost = ?, Status = ? WHERE WorkshopID = ? AND ProjectID = ? AND Status = 0";
+    db.query(sql, [null, null, null, workshopid, projectid], (error, results) => {
+      if (error) {
+        console.error("Error laying Off project for WorkshopID:", error);
+        return res.status(500).json({ error: "Internal server error" });
+      }
+
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ message: "Project not found or not booked!😢" });
+      }
+
+      return res.status(200).json({ message: "Laying Off Project successfully!" });
+    });
+
+  }
+
+  finishProject(req, res) {
+    const { workshopid, projectid } = req.params;
+
+    const sql = "UPDATE craftprojects SET Status = ? WHERE WorkshopID = ? AND ProjectID = ? AND Status = 0";
+    db.query(sql, ['1', workshopid, projectid], (error, results) => {
+      if (error) {
+        console.error("Error update project for WorkshopID:", error);
+        return res.status(500).json({ error: "Internal server error" });
+      }
+
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ message: "Project not found!😢" });
+      }
+
+      return res.status(200).json({ message: "Finish Project successfully!" });
+    });
   }
 
   sendMessage(req, res) {
