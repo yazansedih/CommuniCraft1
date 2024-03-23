@@ -43,6 +43,10 @@ exports.addproject= (req, res) => {
   exports.countMyprojects= (req, res) => {
     craftprojectRepository. countMyprojects(req,res);
   };
+  exports.  workshop= (req, res) => {
+    craftprojectRepository.   workshop(req,res);
+  };
+
   
   
   
