@@ -249,8 +249,82 @@ class UserRepository {
     });
   }
 
+  getSystemReportCompanies(callback) {
+    const sqlQuery = `
+      SELECT 
+        COUNT(CompanyID) AS TotalCompanies,
+        SUM(CASE WHEN Status = 1 THEN 1 ELSE 0 END) AS ActiveCompanies,
+        SUM(CASE WHEN Status = 0 THEN 1 ELSE 0 END) AS InactiveCompanies
+      FROM 
+      companies;
+    `;
 
+    db.query(sqlQuery, (err, results) => {
+      if (err) {
+        console.error('Error fetching system report:', err);
+        return callback(err, null);
+      }
 
+      const systemReport = {
+        totalCompanies: results[0].TotalCompanies,
+        activeCompanies: results[0].ActiveCompanies,
+        inactiveCompanies: results[0].InactiveCompanies
+      };
+
+      callback(null, systemReport);
+    });
+  }
+
+  getSystemReportWorkshops(callback) {
+    const sqlQuery = `
+      SELECT 
+        COUNT(WorkshopID) AS TotalWorkshops
+      FROM 
+      localpartnerships;
+    `;
+
+    db.query(sqlQuery, (err, results) => {
+      if (err) {
+        console.error('Error fetching system report:', err);
+        return callback(err, null);
+      }
+
+      const systemReport = {
+        totalWorkshops: results[0].TotalWorkshops,
+      };
+
+      callback(null, systemReport);
+    });
+  }
+
+  getSystemReportProjects(callback) {
+    const sqlQuery = `
+      SELECT 
+        COUNT(ProjectID) AS TotalProjects,
+        SUM(CASE WHEN Status = 1 THEN 1 ELSE 0 END) AS FinishedProjects,
+        SUM(CASE WHEN Status = 1 THEN 1 ELSE 0 END) AS InWorkProjects,
+        SUM(CASE WHEN Status IS NULL THEN 1 ELSE 0 END) AS InactiveProjects
+      FROM 
+      craftprojects;
+    `;
+
+    db.query(sqlQuery, (err, results) => {
+      if (err) {
+        console.error('Error fetching system report:', err);
+        return callback(err, null);
+      }
+
+      const systemReport = {
+        totalProjects: results[0].TotalProjects,
+        inactiveProjects: results[0].InactiveProjects,
+        inWorkProjects: results[0].InWorkProjects,
+        finishedProjects: results[0].FinishedProjects            
+      };
+
+      callback(null, systemReport);
+    });
+  }
+  
   logoutUser(req, res) {
     const { userId } = req.session;
 

@@ -311,7 +311,7 @@ class LocalpartnershipRepository {
 
   pendingProjects(req, res) {
     const { workshopid } = req.params;
-    console.log(workshopid);
+    
     const sql = "SELECT * FROM craftprojects WHERE WorkshopID = ? AND Status IS NULL";
     db.query(sql, [workshopid], (error, results) => {
       if (error) {

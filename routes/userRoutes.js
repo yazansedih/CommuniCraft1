@@ -18,7 +18,11 @@ router.patch('/acceptUserPending/:userid', authenticateAdmin, userController.acc
 router.patch('/acceptCompanyPending/:companyid', authenticateAdmin, userController.acceptCompanyPending);
 router.delete('/rejectUserPending/:userid', authenticateAdmin, userController.rejectUserPending);
 router.delete('/rejectCompanyPending/:companyid', authenticateAdmin, userController.rejectCompanyPending);
+
 router.get('/system-report', authenticateAdmin, userController.getSystemReport);
+router.get('/system-report-companies', authenticateAdmin, userController.getSystemReportCompanies);
+router.get('/system-report-workshops', authenticateAdmin, userController.getSystemReportWorkshops);
+router.get('/system-report-projects', authenticateAdmin, userController.getSystemReportProjects);
 
 router
   .route('/profile')
