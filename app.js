@@ -9,8 +9,7 @@ const port = 3000;
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
-const sessionConfig = require('./middlewares/sessionConfig'); // Import the session configuration module
+const sessionConfig = require('./middlewares/sessionConfig');
 
 app.use(express.json());
 app.use(sessionConfig);
@@ -25,12 +24,6 @@ const finishedprojectRouter = require('./routes/finishedprojectRoutes');
 const externalAPIs = require('./routes/externalAPIsRoutes');
 
 
-const {
-  addUserSocket,
-  notifyUser,
-  removeUserSocket,
-} = require('./services/SocketService');
-
 app.use('/api/users', userRouter);
 app.use('/api/skills', skillsRouter);
 app.use('/api/companies', companiesRoutes);
@@ -39,19 +32,6 @@ app.use('/api/craftprojects', craftprojectRouter);
 app.use('/api/resources', resourcesRouter);
 app.use('/api/finishedprojects', finishedprojectRouter);
 app.use('/api/externalapi', externalAPIs);
-
-io.on('connection', (socket) => {
-  console.log('A user connected');
-  socket.on('login', (data) => {
-    addUserSocket(data, socket);
-    notifyUser(data, 'test notify');
-  });
-
-  socket.on('disconnect', () => {
-    console.log('User disconnected');
-    removeUserSocket(socket);
-  });
-});
 
 
 server.listen(port, '0.0.0.0', () =>
