@@ -17,13 +17,17 @@ class ExternalAPIsRepository {
     weather(req, res) {
         const { workshopid } = req.params; 
         
-        const sql = 'SELECT Location FROM localpartnerships WHERE WorkshopID = ?';
+        const sql = 'SELECT * FROM localpartnerships WHERE WorkshopID = ?';
         db.query(sql, [workshopid], async (error, results) => {
             if (error) {
                 console.error('Error searching for groups:', error);
                 return res.status(500).json({ error: 'Internal server error' });
             }
-    
+            
+            if(results.length === 0){
+                return res.status(404).json({ message: 'Workshop not found!😢' });
+            }
+            
             const city = results[0].Location;
             const capitalizedCity = city.charAt(0).toUpperCase() + city.slice(1);
             
