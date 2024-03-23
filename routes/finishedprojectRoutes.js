@@ -7,5 +7,8 @@ const FinishedprojectController = require('../controllers/finishedprojectControl
 
 
 router.get('/system-report', authenticateUser, FinishedprojectController.getSystemReport);
+router.get('', authenticateUser, FinishedprojectController.getSystemReport);
+router.get('/:id', authenticateUser, FinishedprojectController.getSystemReport);
+
 
 module.exports = router;
