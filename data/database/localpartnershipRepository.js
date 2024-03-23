@@ -403,6 +403,81 @@ class LocalpartnershipRepository {
 
   }
 
+  async reducingCost(req, res) {
+    const { workshopid, projectid } = req.params;
+
+    try {
+        let oldCost = 0;
+        let resourceCost = 0;
+        let newCost = 0;
+        let groupID;
+        const sql = "SELECT * FROM localpartnerships WHERE WorkshopID = ?";
+        const [workshopResults] = await db.promise().query(sql, [workshopid]);
+
+        if (workshopResults.length === 0) {
+            return res.status(404).json({ message: "Workshop not found!😢" });
+        }
+        groupID = workshopResults[0].GroupID;
+
+        const sql1 = "SELECT * FROM users WHERE GroupID = ? AND Active = 1";
+        const [groupUsers] = await db.promise().query(sql1, [groupID]);
+
+        if (groupUsers.length === 0) {
+            return res.status(404).json({ error: "No user found!😢" });
+        }
+
+        for (const user of groupUsers) {
+            const userId = user.UserID;
+            const sql2 = "SELECT * FROM resource WHERE UserID = ?";
+            const [userResources] = await db.promise().query(sql2, [userId]);
+
+            if (userResources.length === 0) {
+                continue;
+            }
+
+            for (let i = 0; i < userResources.length; i++) {
+                resourceCost += parseInt(userResources[i].Cost);
+            }
+        }
+
+        const projectSql = "SELECT * FROM craftprojects WHERE WorkshopID = ? AND ProjectID = ? AND Status = 0";
+        const [projectResults] = await db.promise().query(projectSql, [workshopid, projectid]);
+
+        if (projectResults.length === 0) {
+            return res.status(404).json({ message: "project not found!😢" });
+        } else {
+            oldCost = projectResults[0].Cost;
+            newCost = parseFloat(((oldCost - resourceCost) * 0.70).toFixed(3));
+        }
+
+        // console.log("resourceCost:", resourceCost);
+        // console.log("oldCost:", oldCost);
+        // console.log("newCost:", newCost);
+
+        const updateCostSql = "UPDATE craftprojects SET Cost = ?  WHERE WorkshopID = ? AND ProjectID = ? AND Status = 0";
+        db.query(updateCostSql, [newCost, workshopid, projectid], (error, results) => {
+          if (error) {
+            console.error("Error update project for WorkshopID:", error);
+            return res.status(500).json({ error: "Internal server error" });
+          }
+
+          if (results.affectedRows === 0) {
+            return res.status(404).json({ message: "Project not found!😢" });
+          }
+
+          return res.status(200).json({ message: "Cost reduction completed successfully." });
+
+        });
+
+    } catch (error) {
+        console.error("Error update project for WorkshopID:", error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
+
+
+
   layingOffProject(req, res) {
     const { workshopid, projectid } = req.params;
 

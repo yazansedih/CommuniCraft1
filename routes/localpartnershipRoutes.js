@@ -32,7 +32,10 @@ router.get('/:workshopid/pendingprojects', authenticateOnwer, localpartnershipCo
 router.post('/:workshopid/acceptproject', authenticateOnwer, localpartnershipController.acceptProject); 
 router.get('/:workshopid/myprojects', authenticateOnwer, localpartnershipController.myProjects); 
 router.get('/:workshopid/searchproject/:projectid', authenticateOnwer, localpartnershipController.searchProject);
+
 router.patch('/:workshopid/workshopProfile/cost/:projectid', authenticateOnwer, localpartnershipController.updateCost);
+router.patch('/:workshopid/reducingcost/:projectid', authenticateOnwer, localpartnershipController.reducingCost);
+
 router.delete('/:workshopid/layingoffproject/:projectid', authenticateOnwer, localpartnershipController.layingOffProject);
 router.patch('/:workshopid/finishproject/:projectid', authenticateOnwer, localpartnershipController.finishProject);
 
