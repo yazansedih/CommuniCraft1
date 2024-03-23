@@ -53,6 +53,10 @@ class ExternalAPIsRepository {
                 console.error('Error searching for groups:', error);
                 return res.status(500).json({ error: 'Internal server error' });
             }
+            
+    if (results.length === 0) {
+        return res.status(404).json({ error: 'Workshop not found' });
+    }
     
             const data = results[0].WorkshopName;
             
