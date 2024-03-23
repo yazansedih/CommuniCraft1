@@ -56,6 +56,36 @@ exports.getSystemReport = (req, res) => {
   });
 };
 
+exports.getSystemReportCompanies = (req, res) => {
+  userRepository.getSystemReportCompanies((err, systemReport) => {
+    if (err) {
+      console.error('Error fetching system report:', err);
+      return res.status(500).json({ error: 'Error fetching system report' });
+    }
+    res.json(systemReport);
+  });
+};
+
+exports.getSystemReportWorkshops = (req, res) => {
+  userRepository.getSystemReportWorkshops((err, systemReport) => {
+    if (err) {
+      console.error('Error fetching system report:', err);
+      return res.status(500).json({ error: 'Error fetching system report' });
+    }
+    res.json(systemReport);
+  });
+};
+
+exports.getSystemReportProjects = (req, res) => {
+  userRepository.getSystemReportProjects((err, systemReport) => {
+    if (err) {
+      console.error('Error fetching system report:', err);
+      return res.status(500).json({ error: 'Error fetching system report' });
+    }
+    res.json(systemReport);
+  });
+};
+
 exports.logoutUser = (req, res) => {
   userRepository.logoutUser(req, res);
 };
