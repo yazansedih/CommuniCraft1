@@ -6,8 +6,7 @@ const { authenticateUser } = require('../middlewares/authenticateUser');
 const FinishedprojectController = require('../controllers/finishedprojectController');
 
 
-router.get('/system-report', authenticateUser, FinishedprojectController.getSystemReport);
-router.get('/allfinishedproject', authenticateUser, FinishedprojectController.getAllFinishedProjects);
+router.get('/allfinishedproject', authenticateUser, FinishedprojectController.AllFinishedProjects);
 router.get('/finishedproject/:id', authenticateUser, FinishedprojectController.getFnishedProjectById);
 
 
