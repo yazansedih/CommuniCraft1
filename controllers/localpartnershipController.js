@@ -24,47 +24,51 @@ exports.addWorkshop = (req, res) => {
   }
 
   exports.searchAllGroups = (req, res) =>{
-    localpartnershipRepository.searchAllGroups(req,res);
+    localpartnershipRepository.searchAllGroups(req, res);
   }
 
   exports.searchGroup = (req, res) => {
-    localpartnershipRepository.searchGroup(req,res);
+    localpartnershipRepository.searchGroup(req, res);
   }
 
   exports.searchBookedGroup = (req, res) => {
-    localpartnershipRepository.searchBookedGroup(req,res);
+    localpartnershipRepository.searchBookedGroup(req, res);
   }
 
   exports.groupEmployment = (req, res) => {
-    localpartnershipRepository.groupEmployment(req,res);
+    localpartnershipRepository.groupEmployment(req, res);
   }
 
   exports.layingOffGroup = (req, res) => {
-    localpartnershipRepository.layingOffGroup(req,res);
+    localpartnershipRepository.layingOffGroup(req, res);
   }
 
   exports.pendingProjects = (req, res) => {
-    localpartnershipRepository.pendingProjects(req,res);
+    localpartnershipRepository.pendingProjects(req, res);
   }
 
   exports.acceptProject = (req, res) => {
-    localpartnershipRepository.acceptProject(req,res);
+    localpartnershipRepository.acceptProject(req, res);
   }
 
   exports.myProjects = (req, res) => {
-    localpartnershipRepository.myProjects(req,res);
+    localpartnershipRepository.myProjects(req, res);
   }
 
   exports.searchProject = (req, res) => {
-    localpartnershipRepository.searchProject(req,res);
+    localpartnershipRepository.searchProject(req, res);
   }
 
   exports.updateCost = (req, res) => {
-    localpartnershipRepository.updateCost(req,res);
+    localpartnershipRepository.updateCost(req, res);
+  }
+
+  exports.reducingCost = (req, res) => {
+    localpartnershipRepository.reducingCost(req, res);
   }
 
   exports.layingOffProject = (req, res) => {
-    localpartnershipRepository.layingOffProject(req,res);
+    localpartnershipRepository.layingOffProject(req, res);
   }
 
   exports.finishProject = (req, res) => {
