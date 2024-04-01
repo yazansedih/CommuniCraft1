@@ -48,6 +48,11 @@ router.get('/searchprojectbymaterial/:material',authenticateAdmin,craftprojectCo
 // router.get('/getTitleById/:id', authenticateCustomer || authenticateAdmin,craftprojectController.getTitleById);
 
 
+router.post('/communication/sendMessage/:projectid', authenticateCustomer, craftprojectController.sendMessage);
+router.get('/communication/receivedMessages/:projectid', authenticateCustomer, craftprojectController.receivedMessages);
+router.get('/communication/sentMessages/:projectid', authenticateCustomer ,craftprojectController.sentMessages);
+router.delete('/communication/deleteMessage/:projectid/:messageid', craftprojectController.deleteMessage);
+router.delete('/communication/deleteMessageHistory/:projectid', authenticateCustomer, craftprojectController.deleteMessageHistory);
 
 
 module.exports = router;

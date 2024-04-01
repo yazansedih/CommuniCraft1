@@ -378,17 +378,144 @@ workshop(req, res) {
   `;
 
 
-db.query(sql, (error, results) => {
-  if (error) {
-      console.error('Error fetching workshops :', error);
-      return res.status(500).json({ error: 'Internal server error' });
-  }
+    db.query(sql, (error, results) => {
+    if (error) {
+        console.error('Error fetching workshops :', error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
 
-  res.status(200).json({  workshops: results });
-  
-});
+    res.status(200).json({  workshops: results });
+    
+    });
 
 }
+
+
+
+
+
+
+
+
+
+sendMessage(req, res) {
+    const { projectid } = req.params;
+    const { message } = req.body;
+
+    if (!message) {
+        return res.status(400).json({ message: "Invalid message data." });
+    }
+
+    db.query(
+        "SELECT * FROM craftprojects WHERE ProjectID = ? AND Status = 0",
+        [projectid],
+        (userError, userResults) => {
+            if (userError) {
+                console.error("Error:", userError);
+                return res.status(500).json({ message: "Internal server error." });
+            }
+
+            if (userResults.length === 0) {
+                return res.status(404).json({
+                    message: "Project does not exist!😢",
+                });
+            }
+
+            if (userResults[0].WorkshopID === null) {
+                return res.status(404).json({
+                    message: "Project does not have a workshop!😢",
+                });
+            }
+
+            const registrationDate = new Date();
+            db.query(
+                "INSERT INTO communication (SenderID, ReceiverID, Message, SenderType, ReceiverType, Timestamp) VALUES (?, ?, ?, ?, ?, ?)",
+                [projectid, userResults[0].WorkshopID, message, 'project', 'workshop', registrationDate],
+                (insertError) => {
+                    if (insertError) {
+                        return res.status(400).json({ message: "Communication failed😢!" });
+                    }
+
+                    return res.status(200).json({ message: "Communication successfully😊." });
+                }
+            );
+        }
+    );
+}
+
+
+  receivedMessages(req,res) {
+    const { projectid } = req.params;
+
+    db.query(
+      "SELECT * FROM communication WHERE ReceiverID = ? AND ReceiverType = ?",
+      [projectid, 'project'],
+      (insertError, resss) => {
+        if (insertError) {
+          console.log("Error:", insertError);
+          return res.status(400).json({ message: "Communication failed😢!" });
+        }
+
+        return res.status(200).json({ receivedMessages: resss });
+      }
+    ); 
+    
+  }
+
+  sentMessages(req,res) {
+    const { projectid } = req.params;
+
+    db.query(
+      "SELECT * FROM communication WHERE SenderID = ? AND SenderType = ?",
+      [projectid, 'project'],
+      (insertError, resss) => {
+        if (insertError) {
+          console.log("Error:", insertError);
+          return res.status(400).json({ message: "Communication failed😢!" });
+        }
+
+        return res.status(200).json({ sentMessages: resss });
+      }
+    ); 
+    
+  }
+
+  deleteMessage(req,res) {
+    const { projectid } = req.params;
+    const { messageid } = req.params;
+
+    db.query(
+      "DELETE FROM communication WHERE MessageID = ? AND (SenderID = ? OR ReceiverID = ?) AND (SenderType = 'project' OR ReceiverType = 'project')",
+      [messageid, projectid, projectid],
+      (insertError, results) => {
+        if (insertError) {
+          return res.status(400).json({ message: "Communication not found!😢" });
+        }
+        
+        return res.json({ message: 'Delete message successfully.😊' });
+      }
+    ); 
+    
+  }
+
+  deleteMessageHistory(req,res) {
+    const { projectid } = req.params;
+
+    db.query(
+      "DELETE FROM communication WHERE (SenderID = ? OR ReceiverID = ?) AND (SenderType = 'project' OR ReceiverType = 'project')",
+      [projectid, projectid],
+      (insertError, results) => {
+        if (insertError) {
+          return res.status(400).json({ message: "Communication not found!😢" });
+        }
+        
+        return res.json({ message: 'Delete message successfully.😊' });
+      }
+    );    
+    
+  }
+
+
 
 }
 

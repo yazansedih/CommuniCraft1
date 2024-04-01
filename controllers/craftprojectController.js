@@ -49,4 +49,24 @@ exports.addproject= (req, res) => {
 
   
   
+
   
+  exports.sendMessage = (req, res) => {
+    craftprojectRepository.sendMessage(req,res);
+  }
+
+  exports.receivedMessages = (req, res) => {
+    craftprojectRepository.receivedMessages(req,res);
+  }
+
+  exports.sentMessages = (req, res) => {
+    craftprojectRepository.sentMessages(req,res);
+  }
+
+  exports.deleteMessage = (req, res) => {
+    craftprojectRepository.deleteMessage(req,res);
+  }
+
+  exports.deleteMessageHistory = (req, res) => {
+    craftprojectRepository.deleteMessageHistory(req,res);
+  }
