@@ -62,7 +62,7 @@ exports.signup = catchAsync(async (req, res, next) => {
             null,            
             date,
             null,            
-            '1', 
+            '0', 
             null,
           ],
           type: sequelize.QueryTypes.INSERT,

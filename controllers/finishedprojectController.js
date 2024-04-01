@@ -9,7 +9,7 @@ exports.AllFinishedProjects=(req,res)=>{
 };
 
 exports.getFnishedProjectById=(req,res)=>{
-  finishedprojectRepository.allFinishedProjects(req, res);
+  finishedprojectRepository.finishedProjectById(req, res);
 };
 
 
