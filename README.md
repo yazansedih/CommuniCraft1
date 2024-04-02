@@ -30,7 +30,7 @@ CommuniCraft serves as a robust backend API designed to handle craft projects da
 
 ## Project Folders
 
-<img width="197" alt="folders" src="https://github.com/AdvancedSoftwareTeam/EcoTrack/assets/111571170/fccf2069-262e-4ac2-9476-eff605811d9d">
+<img width="197" alt="folders" src="https://github.com/yazansedih/CommuniCraft1/assets/137224224/02804294-c395-4c73-af4e-ba6f2fc8f510">
 
 ## Features
 
