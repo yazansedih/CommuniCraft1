@@ -83,11 +83,10 @@ We have employed Postman for comprehensive API testing to ensure the functionali
 1. Import the provided Postman collection.
 2. Run collection tests individually or perform a collection run to test various API endpoints.
 
--
-
 #### Demo 
 
 click on the following link to watch the testing [demo video]().
 
 ## Vision
+CommuniCraft seeks to become a platform used in the work of most local and international projects, and to be a catalyst for change and development in this field by facilitating the formation of partnerships and linking all components of the projects.
 
