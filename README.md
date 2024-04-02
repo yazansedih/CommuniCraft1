@@ -78,15 +78,12 @@ The API is fully documented using Postman. Access the documentation [here](https
 
 We have employed Postman for comprehensive API testing to ensure the functionality, reliability, and accuracy of the CommuniCraft platform. Our testing strategy involves:
 
-- **Automated Tests:** Writing automated test scripts within Postman to perform API endpoint testing, covering scenarios for user and company profile management, project library, local partnership, communication, and more.
-- **Environment Setup:** Configuring different environments within Postman to simulate various conditions and perform thorough testing.
-- **Collection Runs:** Executing collection runs in Postman to validate endpoints, data validations, authentication mechanisms, and error handling.
-
 **Instructions for Testing Using Postman:**
 
 1. Import the provided Postman collection.
-2. Set up the necessary environment variables, choose the *CommuniCraft*.
-3. Run collection tests individually or perform a collection run to test various API endpoints.
+2. Run collection tests individually or perform a collection run to test various API endpoints.
+
+-
 
 #### Demo 
 
