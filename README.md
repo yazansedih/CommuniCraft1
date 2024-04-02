@@ -60,9 +60,9 @@ CommuniCraft serves as a robust backend API designed to handle craft projects da
 
 ## Getting Started
 
-To get started with EcoTrack API, follow these steps:
+To get started with CommuniCraft API, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/AdvancedSoftwareTeam/EcoTrack.git` 
+1. Clone the repository: `git clone https://github.com/yazansedih/CommuniCraft1.git` 
 2. Install dependencies: `npm install`
 3. Configure environment variables.
 4. Setup the database using mysql ( sql code is inside database folder ).
