@@ -70,7 +70,7 @@ To get started with CommuniCraft API, follow these steps:
 
 ## API Documentation
 
-The API is fully documented using Postman. Access the documentation [here](https://app.getpostman.com/join-team?invite_code=cd8e606a21a0782b72b3050018792f22).
+The API is fully documented using Postman. Access the documentation [here](https://postman.com/communicraft1/workspace/team-workspace/collection/33029075-69b62aad-2fbf-4b65-9f5a-b37b6de1d176).
 
 ## Testing
 
