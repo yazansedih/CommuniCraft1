@@ -25,7 +25,8 @@ creation and foster meaningful connections through collaborative craft projects.
 
 ## Introduction
 
-EcoTrack serves as a robust backend API designed to handle environmental data collection, user profile management, environmental alerts, community reporting, sustainability scoring, educational resources provision, and open data access for researchers and organizations. It's a platform aimed at promoting environmental awareness, facilitating data sharing, and encouraging sustainable practices.
+CommuniCraft serves as a robust backend API designed to handle craft projects data collection, user profile management, local partnership integration, community reporting, supporting companies
+, resources provision, seeing finished projects and benefiting from them. It's a platform aimed at fostering connections and creativity through collaborative craft projects.
 
 ## Project Folders
 
