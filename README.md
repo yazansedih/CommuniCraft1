@@ -36,17 +36,18 @@ CommuniCraft serves as a robust backend API designed to handle craft projects da
 
 ### Main Features:
 
-1. **Data Collection:** Enables users to submit environmental data from various sources like IoT sensors, manual observations, or data uploads.
-2. **User Profiles:** Users can create and manage profiles to track contributions and connect with others.
-3. **Environmental Alerts:** Notification system for significant changes or concerning trends in environmental data.
-4. **Community Reporting:** Allows users to report environmental issues such as pollution, deforestation, or wildlife endangerment.
-5. **Sustainability Score:** A scoring system assessing users' environmental contributions and sustainability efforts.
-6. **Educational Resources:** Provides articles and guides on environmental topics to raise awareness and educate users.
-7. **Open Data Access:** Offers APIs for researchers, scientists, and organizations to access aggregated environmental data for research and analysis.
+1. **Project Library:**  A curated collection of craft projects ranging from beginner to advanced, categorized by skills, materials, and group size. 
+2. **Skill Matching:** Users create profiles showcasing their craft skills and interests, facilitating connections with others seeking collaborators.
+3. **Collaborative Planning:** Integrated communication tools and project planning features allow teams to coordinate, share ideas, and assign tasks.
+4. **Resource Sharing:** Users can list available materials and tools, promoting resourcefulness and reducing individual costs.
+5. **Showcase and Sharing::** The platform facilitates sharing finished projects, fostering community engagement, and inspiring others. 
+6. **Local Partnership Integration:** Connects users with local craft stores, workshops, and group artisans, and supporting companies, promoting local businesses and knowledge sharing.
 
 ### Additional Features:
 
-- **Socket.IO Integration:** bidirectional communication between clients and server.
+- **User Privacy and Data Security:** Implement stringent privacy and security measures to protect users' data, and there is Roles.
+- **Communication:** bidirectional communication between all elements in the project, users, craftproject, workshops, groups, companies.
+- **Error Handling and Logging:** The API must implement error handling and logging to help with debugging and troubleshooting.
 - **External API Integration:** Utilized to enhance functionality and supplement data collection.
 
 ## Technologies Used
