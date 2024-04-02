@@ -53,11 +53,9 @@ CommuniCraft serves as a robust backend API designed to handle craft projects da
 ## Technologies Used
 
 - **Node.js:** Backend development platform.
-- **Socket.IO:** Real-time communication for alerts.
 - **MySQL:** Database for CRUD operations.
 - **Postman:** API building, testing and documentation tool.
 - **Git:** Version control system.
-- **Socket.IO:** for real-time alerts .
 - **Axios:** making and managing HTTP requests.
 
 ## Getting Started
