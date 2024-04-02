@@ -1,4 +1,3 @@
-![CommuniCraft1](https://github.com/yazansedih/CommuniCraft1/assets/137224224/b0611ed2-b705-4e2f-9d2c-b1048d39eeb1)
 
 <div align="center">
   <img src="https://github.com/BaraSedih11/EcoTrack/assets/98843912/9086ea16-4349-4efd-8c4c-bce1c571c29f](https://github.com/yazansedih/CommuniCraft1/assets/137224224/b0611ed2-b705-4e2f-9d2c-b1048d39eeb1" width=500px/>
