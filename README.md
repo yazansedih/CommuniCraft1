@@ -76,22 +76,22 @@ The API is fully documented using Postman. Access the documentation [here](https
 
 #### Postman Testing Strategy
 
-We have employed Postman for comprehensive API testing to ensure the functionality, reliability, and accuracy of the EcoTrack platform. Our testing strategy involves:
+We have employed Postman for comprehensive API testing to ensure the functionality, reliability, and accuracy of the CommuniCraft platform. Our testing strategy involves:
 
-- **Automated Tests:** Writing automated test scripts within Postman to perform API endpoint testing, covering scenarios for data submission, user profile management, environmental alerts, community reporting, and more.
+- **Automated Tests:** Writing automated test scripts within Postman to perform API endpoint testing, covering scenarios for user and company profile management, project library, local partnership, communication, and more.
 - **Environment Setup:** Configuring different environments within Postman to simulate various conditions and perform thorough testing.
 - **Collection Runs:** Executing collection runs in Postman to validate endpoints, data validations, authentication mechanisms, and error handling.
 
 **Instructions for Testing Using Postman:**
 
 1. Import the provided Postman collection.
-2. Set up the necessary environment variables, choose the *EcoTrack Env*.
+2. Set up the necessary environment variables, choose the *CommuniCraft*.
 3. Run collection tests individually or perform a collection run to test various API endpoints.
 
 #### Demo 
 
-click on the following link to watch the testing [demo video](https://drive.google.com/file/d/1IhVZ-JUvbNWw50SRC-YMC2zegsws5C2s/view?usp=sharing).
+click on the following link to watch the testing [demo video]().
 
 ## Vision
 
-EcoTrack strives to be more than a data platform—it's a catalyst for change. Through collaboration, awareness, and informed decisions, it spearheads environmental initiatives, empowering global communities and organizations.
+CommuniCraft strives to be more than a data platform—it's a catalyst for change. Through collaboration, awareness, and informed decisions, it spearheads environmental initiatives, empowering global communities and organizations.
