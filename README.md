@@ -91,4 +91,3 @@ click on the following link to watch the testing [demo video]().
 
 ## Vision
 
-CommuniCraft strives to be more than a data platform—it's a catalyst for change. Through collaboration, awareness, and informed decisions, it spearheads environmental initiatives, empowering global communities and organizations.
