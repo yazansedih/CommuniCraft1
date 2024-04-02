@@ -7,8 +7,9 @@
  
 </div>  
 
-<h1>Environmental Monitoring and Reporting Platform</h1>
-EcoTrack is a cutting-edge platform for environmental reporting and monitoring; it manages the distribution of environmental data and modifies it. This platform, a backend API built with Node.js, was developed to provide a robust framework for user interaction, data collection, and insightful reporting to satisfy the growing need for all-encompassing environmental solutions.
+<h1>CommuniCraft - Building Bridges Through	Collaborative	Craftsmanship.</h1>
+CommuniCraft - a platform that connects individuals through collaborative craft projects, it connects people with the joy of hands-on 
+creation and foster meaningful connections through collaborative craft projects. This platform, a backend API built with Node.js, was developed to provide a robust framework for user interaction, data collection, and facilitating the completion of craft projects.
 
 ## Table of Contents
 
@@ -24,44 +25,44 @@ EcoTrack is a cutting-edge platform for environmental reporting and monitoring; 
 
 ## Introduction
 
-EcoTrack serves as a robust backend API designed to handle environmental data collection, user profile management, environmental alerts, community reporting, sustainability scoring, educational resources provision, and open data access for researchers and organizations. It's a platform aimed at promoting environmental awareness, facilitating data sharing, and encouraging sustainable practices.
+CommuniCraft serves as a robust backend API designed to handle craft projects data collection, user profile management, local partnership integration, community reporting, supporting companies
+, resources provision, seeing finished projects and benefiting from them. It's a platform aimed at fostering connections and creativity through collaborative craft projects.
 
 ## Project Folders
 
-<img width="197" alt="folders" src="https://github.com/AdvancedSoftwareTeam/EcoTrack/assets/111571170/fccf2069-262e-4ac2-9476-eff605811d9d">
+<img width="197" alt="folders" src="https://github.com/yazansedih/CommuniCraft1/assets/137224224/02804294-c395-4c73-af4e-ba6f2fc8f510">
 
 ## Features
 
 ### Main Features:
 
-1. **Data Collection:** Enables users to submit environmental data from various sources like IoT sensors, manual observations, or data uploads.
-2. **User Profiles:** Users can create and manage profiles to track contributions and connect with others.
-3. **Environmental Alerts:** Notification system for significant changes or concerning trends in environmental data.
-4. **Community Reporting:** Allows users to report environmental issues such as pollution, deforestation, or wildlife endangerment.
-5. **Sustainability Score:** A scoring system assessing users' environmental contributions and sustainability efforts.
-6. **Educational Resources:** Provides articles and guides on environmental topics to raise awareness and educate users.
-7. **Open Data Access:** Offers APIs for researchers, scientists, and organizations to access aggregated environmental data for research and analysis.
+1. **Project Library:**  A curated collection of craft projects ranging from beginner to advanced, categorized by skills, materials, and group size. 
+2. **Skill Matching:** Users create profiles showcasing their craft skills and interests, facilitating connections with others seeking collaborators.
+3. **Collaborative Planning:** Integrated communication tools and project planning features allow teams to coordinate, share ideas, and assign tasks.
+4. **Resource Sharing:** Users can list available materials and tools, promoting resourcefulness and reducing individual costs.
+5. **Showcase and Sharing::** The platform facilitates sharing finished projects, fostering community engagement, and inspiring others. 
+6. **Local Partnership Integration:** Connects users with local craft stores, workshops, and group artisans, and supporting companies, promoting local businesses and knowledge sharing.
 
 ### Additional Features:
 
-- **Socket.IO Integration:** bidirectional communication between clients and server.
+- **User Privacy and Data Security:** Implement stringent privacy and security measures to protect users' data, and there is Roles.
+- **Communication:** bidirectional communication between all elements in the project, users, craftproject, workshops, groups, companies.
+- **Error Handling and Logging:** The API must implement error handling and logging to help with debugging and troubleshooting.
 - **External API Integration:** Utilized to enhance functionality and supplement data collection.
 
 ## Technologies Used
 
 - **Node.js:** Backend development platform.
-- **Socket.IO:** Real-time communication for alerts.
 - **MySQL:** Database for CRUD operations.
 - **Postman:** API building, testing and documentation tool.
 - **Git:** Version control system.
-- **Socket.IO:** for real-time alerts .
 - **Axios:** making and managing HTTP requests.
 
 ## Getting Started
 
-To get started with EcoTrack API, follow these steps:
+To get started with CommuniCraft API, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/AdvancedSoftwareTeam/EcoTrack.git` 
+1. Clone the repository: `git clone https://github.com/yazansedih/CommuniCraft1.git` 
 2. Install dependencies: `npm install`
 3. Configure environment variables.
 4. Setup the database using mysql ( sql code is inside database folder ).
@@ -69,28 +70,23 @@ To get started with EcoTrack API, follow these steps:
 
 ## API Documentation
 
-The API is fully documented using Postman. Access the documentation [here](https://documenter.getpostman.com/view/29528140/2s9YkuZyR9).
+The API is fully documented using Postman. Access the documentation [here](https://documenter.getpostman.com/view/33029075/2sA35Jyz4p).
 
 ## Testing
 
 #### Postman Testing Strategy
 
-We have employed Postman for comprehensive API testing to ensure the functionality, reliability, and accuracy of the EcoTrack platform. Our testing strategy involves:
-
-- **Automated Tests:** Writing automated test scripts within Postman to perform API endpoint testing, covering scenarios for data submission, user profile management, environmental alerts, community reporting, and more.
-- **Environment Setup:** Configuring different environments within Postman to simulate various conditions and perform thorough testing.
-- **Collection Runs:** Executing collection runs in Postman to validate endpoints, data validations, authentication mechanisms, and error handling.
+We have employed Postman for comprehensive API testing to ensure the functionality, reliability, and accuracy of the CommuniCraft platform. Our testing strategy involves:
 
 **Instructions for Testing Using Postman:**
 
 1. Import the provided Postman collection.
-2. Set up the necessary environment variables, choose the *EcoTrack Env*.
-3. Run collection tests individually or perform a collection run to test various API endpoints.
+2. Run collection tests individually or perform a collection run to test various API endpoints.
 
 #### Demo 
 
-click on the following link to watch the testing [demo video](https://drive.google.com/file/d/1IhVZ-JUvbNWw50SRC-YMC2zegsws5C2s/view?usp=sharing).
+click on the following link to watch the testing [demo video]().
 
 ## Vision
+CommuniCraft seeks to become a platform used in the work of most local and international projects, and to be a catalyst for change and development in this field by facilitating the formation of partnerships and linking all components of the projects.
 
-EcoTrack strives to be more than a data platform—it's a catalyst for change. Through collaboration, awareness, and informed decisions, it spearheads environmental initiatives, empowering global communities and organizations.
