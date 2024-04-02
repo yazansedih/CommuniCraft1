@@ -7,8 +7,9 @@
  
 </div>  
 
-<h1>Environmental Monitoring and Reporting Platform</h1>
-EcoTrack is a cutting-edge platform for environmental reporting and monitoring; it manages the distribution of environmental data and modifies it. This platform, a backend API built with Node.js, was developed to provide a robust framework for user interaction, data collection, and insightful reporting to satisfy the growing need for all-encompassing environmental solutions.
+<h1>CommuniCraft - Building Bridges Through	Collaborative	Craftsmanship.</h1>
+CommuniCraft - a platform that connects individuals through collaborative craft projects, it connects people with the joy of hands-on 
+creation and foster meaningful connections through collaborative craft projects. This platform, a backend API built with Node.js, was developed to provide a robust framework for user interaction, data collection, and facilitating the completion of craft projects.
 
 ## Table of Contents
 
