@@ -3,7 +3,7 @@
   <br />
   <br />
 
- ![GitHub repo size](https://img.shields.io/github/repo-size/BaraSedih11/EcoTrack) ![GitHub repo file count (file type)](https://img.shields.io/github/directory-file-count/BaraSedih11/EcoTrack) ![NPM Version](https://img.shields.io/npm/v/npm) ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/BaraSedih11/EcoTrack/main)
+ ![GitHub repo size](https://img.shields.io/github/repo-size/yazansedih/CommuniCraft1) ![GitHub repo file count (file type)](https://img.shields.io/github/directory-file-count/yazansedih/CommuniCraft1) ![NPM Version](https://img.shields.io/npm/v/npm) ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/yazansedih/CommuniCraft1/main)
  
 </div>  
 
