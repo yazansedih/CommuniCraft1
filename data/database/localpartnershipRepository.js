@@ -254,9 +254,9 @@ class LocalpartnershipRepository {
         const Values = ["1", groupid];
         await db.promise().query(uQuery, Values);
 
-        const uUserQuery = `UPDATE users SET GroupID = ? WHERE UserID = ?`;
-        const qUserValues = [groupid, userId];
-        await db.promise().query(uUserQuery, qUserValues);
+        // const uUserQuery = `UPDATE users SET GroupID = ? WHERE UserID = ?`;
+        // const qUserValues = [groupid, userId];
+        // await db.promise().query(uUserQuery, qUserValues);
   
         return res.json({ message: "Group Employment successfully." });
       }
@@ -447,7 +447,7 @@ class LocalpartnershipRepository {
             return res.status(404).json({ message: "project not found!😢" });
         } else {
             oldCost = projectResults[0].Cost;
-            newCost = parseFloat(((oldCost - resourceCost) * 0.70).toFixed(3));
+            newCost = parseFloat((oldCost - (resourceCost * 0.70)).toFixed(3));
         }
 
         // console.log("resourceCost:", resourceCost);

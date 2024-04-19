@@ -67,7 +67,7 @@ class UserRepository {
         }
 
         if (results.length === 0) {
-          return res.status(401).json({ message: 'Invalid data.' });
+          return res.status(401).json({ message: 'Invalid data or admin did not activate your account yet.' });
         }
 
         const user = results[0];

@@ -369,13 +369,14 @@ class CompaniesRepository {
           return res.status(404).json({ error: 'Collaboration not found!'});        
         }                    
 
-        req.session.destroy((destroyError) => {
-          if (destroyError) {
-              return res.status(500).json({ message: 'Error destroying session.' });
-          }
+        // req.session.destroy((destroyError) => {
+        //   if (destroyError) {
+        //       return res.status(500).json({ message: 'Error destroying session.' });
+        //   }
 
-          return res.json({ message: 'Collaboration deletion successfully!😊' });
-        });
+        // });
+        return res.json({ message: 'Collaboration deletion successfully!😊' });
+
       });
   }
 
