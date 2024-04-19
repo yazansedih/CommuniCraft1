@@ -85,7 +85,7 @@ We have employed Postman for comprehensive API testing to ensure the functionali
 
 #### Demo 
 
-click on the following link to watch the testing [demo video]().
+click on the following link to watch the testing [demo video](https://youtu.be/veSFbSqZ7EQ).
 
 ## Vision
 CommuniCraft seeks to become a platform used in the work of most local and international projects, and to be a catalyst for change and development in this field by facilitating the formation of partnerships and linking all components of the projects.
