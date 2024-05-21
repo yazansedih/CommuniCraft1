@@ -31,18 +31,14 @@ router.get('/countMyprojects',authenticateCustomer,craftprojectController.countM
 //router.get('/searchproject/:id', authenticateCustomer || authenticateAdmin,craftprojectController.searchproject);
 
 
-
 router.get('/searchALLprojects',  ACA , craftprojectController.searchALLprojects);
-
 router.get('/countALLprojects', ACA , craftprojectController.countALLprojects);
-
 
 
 // router.get('/searchprojectbySkillLevel/:SkillLevel',  authenticateAdmin,craftprojectController.searchprojectbySkillLevel);
 // router.get('/searchprojectbyGroupSize/:GroupSize', authenticateAdmin,craftprojectController.searchprojectbyGroupSize);
 router.get('/searchprojectbymaterial/:material',authenticateAdmin,craftprojectController.searchprojectbymaterial);
  router.get('/searchprojectbyContainTitle/:Title',authenticateAdmin,craftprojectController.searchprojectbyContainTitle);
-
 
 
 // router.get('/getTitleById/:id', authenticateCustomer || authenticateAdmin,craftprojectController.getTitleById);
