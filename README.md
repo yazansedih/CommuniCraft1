@@ -3,7 +3,13 @@
   <br />
   <br />
 
- ![GitHub repo size](https://img.shields.io/github/repo-size/yazansedih/CommuniCraft1) ![GitHub repo file count (file type)](https://img.shields.io/github/directory-file-count/yazansedih/CommuniCraft1) ![NPM Version](https://img.shields.io/npm/v/npm) ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/yazansedih/CommuniCraft1/main)
+ ![GitHub repo size](https://img.shields.io/github/repo-size/yazansedih/CommuniCraft1) 
+ ![GitHub repo file count (file type)](https://img.shields.io/github/directory-file-count/yazansedih/CommuniCraft1) 
+ ![NPM Version](https://img.shields.io/npm/v/npm) 
+ ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/yazansedih/CommuniCraft1/main) 
+ ![GitHub issues](https://img.shields.io/github/issues/yazansedih/CommuniCraft1)
+ ![GitHub contributors](https://img.shields.io/github/contributors/yazansedih/CommuniCraft1)
+ ![GitHub All Releases](https://img.shields.io/github/downloads/yazansedih/CommuniCraft1/total)
  
 </div>  
 
